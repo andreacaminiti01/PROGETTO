@@ -1,4 +1,4 @@
-package it.unipv.progetto.model;
+package unipv.barbershop.model.inventory;
 
 public class Prodotto {
 	private int id;

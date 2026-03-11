@@ -1,4 +1,4 @@
-package it.unipv.progetto.model;
+package unipv.barbershop.model.user;
 
 public class Amministratore extends Utente {
 	private String ruolo;

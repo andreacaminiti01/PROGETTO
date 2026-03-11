@@ -1,4 +1,7 @@
-package it.unipv.progetto.model;
+package unipv.barbershop.model.feedback;
+
+import unipv.barbershop.model.booking.Prenotazione;
+import unipv.barbershop.model.user.Cliente;
 
 public class Feedback {
 	private int id;

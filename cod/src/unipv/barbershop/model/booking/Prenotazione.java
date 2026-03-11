@@ -1,6 +1,8 @@
-package it.unipv.progetto.model;
+package unipv.barbershop.model.booking;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import unipv.barbershop.model.user.Cliente;
 
 
 

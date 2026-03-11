@@ -1,4 +1,4 @@
-package it.unipv.progetto.model;
+package unipv.barbershop.model.booking;
 
 public class Servizio {
 	private int id;

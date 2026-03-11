@@ -1,4 +1,10 @@
-package it.unipv.progetto.model;
+package unipv.barbershop.model.user;
+
+/**
+ * Superclasse astratta che rappresenta un utente generico del sistema.
+ * Contiene gli attributi comuni a tutti gli attori (Cliente, Barbiere, Amministratore).
+ * Questa classe non può essere istanziata direttamente.
+ * */
 
 public abstract class Utente {
 	private int id;
