@@ -2,7 +2,7 @@ package unipv.barbershop.model.booking;
 
 public class Servizio {
 	private int id;
-	private String nome;
+	private String nome;   
 	private double prezzo;
 	private int durataMinuti;
 	
