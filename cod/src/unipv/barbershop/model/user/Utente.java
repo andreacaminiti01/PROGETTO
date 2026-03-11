@@ -6,6 +6,9 @@ package unipv.barbershop.model.user;
  * Questa classe non può essere istanziata direttamente.
  * */
 
+//abctract cosi nessuno potrà creare "Utente" generico visto che 
+//avremo cliente per prenotare o barbiere a lavorarci
+
 public abstract class Utente {
 	private int id;
 	private String nome;
