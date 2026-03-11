@@ -1,8 +1,11 @@
 package unipv.barbershop.model.booking;
-import java.time.LocalDate;
-import java.time.LocalTime;
+
 
 import unipv.barbershop.model.user.Cliente;
+import unipv.barbershop.model.staff.Barbiere; 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -10,21 +13,40 @@ public class Prenotazione {
 	private int id;
 	private Cliente cliente;
 	private Barbiere barbiere;
-	private Servizio servizio;
-	private LocalDate data;
-	private LocalTime oraInizio;
+	private LocalDateTime dataOra; //data e ora insieme per controllare meglio se un barbiere è libero
+	private List<Servizio> serviziScelti; //con lista permette di prenotare piu cose insieme come Taglio+Barba
 	
-	public Prenotazione(Cliente cliente, Barbiere barbiere, Servizio servizio, LocalDate data, LocalTime oraInizio) {
+	public Prenotazione(Cliente cliente, Barbiere barbiere, LocalDateTime dataOra) {
 		super();
 		this.cliente = cliente;
 		this.barbiere = barbiere;
-		this.servizio = servizio;
-		this.data = data;
-		this.oraInizio = oraInizio;
+		this.dataOra = dataOra;
+		this.serviziScelti = new ArrayList<>();
 	}
 
 	public Prenotazione() {
 		super();
+		this.serviziScelti = new ArrayList<>();
+	}
+	
+	public void addServizio(Servizio s) { //per capire i servizi scelti dal cliente
+		this.serviziScelti.add(s);
+	}
+	
+	public double calcolaPrezzoTotale() {
+		double totale = 0;
+		for ( Servizio s : serviziScelti) {
+			totale += s.getPrezzo();
+		}
+		return totale;
+	}
+	
+	public int calcolareDurataTotaleMinuti() {
+		int durataTotale = 0;
+		for(Servizio s : serviziScelti) {
+			durataTotale += s.getDurataMinuti();
+			}
+		return durataTotale;
 	}
 
 	public int getId() {
@@ -50,44 +72,36 @@ public class Prenotazione {
 	public void setBarbiere(Barbiere barbiere) {
 		this.barbiere = barbiere;
 	}
-
-	public Servizio getServizio() {
-		return servizio;
-	}
-
-	public void setServizio(Servizio servizio) {
-		this.servizio = servizio;
-	}
-
-	public LocalDate getData() {
-		return data;
-	}
-
-	public void setData(LocalDate data) {
-		this.data = data;
-	}
-
-	public LocalTime getOraInizio() {
-		return oraInizio;
-	}
-
-	public void setOraInizio(LocalTime oraInizio) {
-		this.oraInizio = oraInizio;
-	}
 	
-	
+	public LocalDateTime getDataOra() {
+		return dataOra;
+	}
+
+	public void setDataOra(LocalDateTime dataOra) {
+		this.dataOra = dataOra;
+	}
+
+	public List<Servizio> getServiziScelti() {
+		return serviziScelti;
+	}
+
+	public void setServiziScelti(List<Servizio> serviziScelti) {
+		this.serviziScelti = serviziScelti;
+	}
+
 	/**
      * Calcola dinamicamente l'ora di fine sommando la durata del servizio all'ora di inizio.
      * Molto utile per il Check Disponibilità.
      */
-    public LocalTime getOraFine() {
-        if (oraInizio != null && servizio != null) {
-            return oraInizio.plusMinutes(servizio.getDurataMinuti());
-        }
-        return null;
-    }
+    //public LocalTime getOraFine() {
+     //   if (oraInizio != null && servizio != null) {
+      //      return oraInizio.plusMinutes(servizio.getDurataMinuti());
+      //  }
+      //  return null;
+    //}
 	
-	
+	//ho unito data e ora mi sembra piu comodo pero se in caso 
+	//ritorniamo come prima questa non l'ho eliminata ma messa sotto commento
 	
 	
 	
