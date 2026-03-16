@@ -8,9 +8,9 @@ public class Servizio {
 	
 	public Servizio(String nome, double prezzo, int durataMinuti) {
 		super();
-		this.nome = nome;
-		this.prezzo = prezzo;
-		this.durataMinuti = durataMinuti;
+		this.setNome(nome);
+		this.setPrezzo(prezzo);
+		this.setDurataMinuti(durataMinuti);
 	}
 	
 	public Servizio() {
@@ -38,10 +38,16 @@ public class Servizio {
 	}
 
 	public void setPrezzo(double prezzo) {
+		if (prezzo < 0) {
+	        throw new IllegalArgumentException("Il prezzo del servizio non può essere negativo.");
+	    }
 		this.prezzo = prezzo;
 	}
 
 	public int getDurataMinuti() {
+		if (durataMinuti <= 0) {
+	        throw new IllegalArgumentException("La durata del servizio deve essere maggiore di zero.");
+	    }
 		return durataMinuti;
 	}
 

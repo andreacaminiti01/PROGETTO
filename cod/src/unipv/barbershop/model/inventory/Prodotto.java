@@ -9,8 +9,8 @@ public class Prodotto {
 	
 	public Prodotto(String nome, int quantitaInScorta) {
 		super();
-		this.nome = nome;
-		this.quantitaInScorta = quantitaInScorta;
+		this.setNome(nome);
+		this.setQuantitaInScorta(quantitaInScorta);
 	}
 	
 	public Prodotto() {
@@ -31,6 +31,9 @@ public class Prodotto {
 	}
 	
 	public void setNome(String nome) {
+		if (nome == null || nome.trim().isEmpty()) {
+	        throw new IllegalArgumentException("Il nome del prodotto non può essere vuoto.");
+	    }
 		this.nome = nome;
 	}
 	
@@ -40,6 +43,9 @@ public class Prodotto {
 	}
 	
 	public void setQuantitaInScorta(int quantitaInScorta) {
+		if (quantitaInScorta < 0) {
+	        throw new IllegalArgumentException("La quantità in scorta non può essere negativa.");
+	    }
 		this.quantitaInScorta = quantitaInScorta;
 	}
 	

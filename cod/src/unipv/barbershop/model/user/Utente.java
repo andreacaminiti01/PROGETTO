@@ -9,6 +9,11 @@ package unipv.barbershop.model.user;
 //abctract cosi nessuno potrà creare "Utente" generico visto che 
 //avremo cliente per prenotare o barbiere a lavorarci
 
+//modifica costruttore per tutte le implementazioni delle eccezioni NON controllate(Runtimme)
+//cioè viene sollevata quando il chiamante passa un argomento inappropriato
+
+//modifica dei set per implementare queste eccezioni non Controllate 
+
 public abstract class Utente {
 	private int id;
 	private String nome;
@@ -22,10 +27,10 @@ public abstract class Utente {
 
 	public Utente(String nome, String cognome, String email, String password) {
 		super();
-		this.nome = nome;
-		this.cognome = cognome;
-		this.email = email;
-		this.password = password;
+		this.setNome(nome);
+		this.setCognome(cognome);
+		this.setEmail(email);
+		this.setPassword(password);
 	}
 
 	public int getId() {
@@ -43,6 +48,9 @@ public abstract class Utente {
 	}
 
 	public void setNome(String nome) {
+		if (nome == null || nome.trim().isEmpty()) {
+	        throw new IllegalArgumentException("Il nome non può essere vuoto.");
+	    }
 		this.nome = nome;
 	}
 
@@ -53,6 +61,9 @@ public abstract class Utente {
 	}
 
 	public void setCognome(String cognome) {
+		if (cognome == null || cognome.trim().isEmpty()) {
+	        throw new IllegalArgumentException("Il cognome non può essere vuoto.");
+	    }
 		this.cognome = cognome;
 	}
 
@@ -63,6 +74,11 @@ public abstract class Utente {
 	}
 	
 	public void setEmail(String email) {
+		// Controllo base: se l'email è null, vuota, o non contiene la "@", lancio l'eccezione
+	    if (email == null || email.trim().isEmpty() || !email.contains("@")) {
+	        // Uso l'eccezione non controllata (Runtime) suggerita dal professore
+	        throw new IllegalArgumentException("Formato email non valido: " + email);
+	    }
 		this.email = email;
 	}
 
@@ -73,6 +89,11 @@ public abstract class Utente {
 	}
 
 	public void setPassword(String password) {
+		// Controllo: la password non deve essere nulla, vuota, o più corta di 6 caratteri
+	    if (password == null || password.trim().isEmpty() || password.length() < 6) {
+	        // Genera l'eccezione perché l'argomento passato è inappropriato
+	        throw new IllegalArgumentException("Errore: la password non può essere vuota e deve avere almeno 6 caratteri.");
+	    }
 		this.password = password;
 	}
 

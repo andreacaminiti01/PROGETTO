@@ -11,7 +11,7 @@ public class Cliente extends Utente {
 
 	public Cliente(String nome, String cognome, String email, String password, String telefono) {
 		super(nome, cognome, email, password);
-		this.telefono=telefono;
+		this.setTelefono(telefono);
 	}
 
 	public String getTelefono() {
@@ -19,6 +19,9 @@ public class Cliente extends Utente {
 	}
 
 	public void setTelefono(String telefono) {
+		if (telefono == null || telefono.trim().isEmpty()) {
+	        throw new IllegalArgumentException("Il numero di telefono è obbligatorio.");
+	    }
 		this.telefono = telefono;
 	}
 
