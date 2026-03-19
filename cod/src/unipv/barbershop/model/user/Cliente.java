@@ -19,9 +19,6 @@ public class Cliente extends Utente {
 	}
 
 	public void setTelefono(String telefono) {
-		if (telefono == null || telefono.trim().isEmpty()) {
-	        throw new IllegalArgumentException("Il numero di telefono è obbligatorio.");
-	    }
 		this.telefono = telefono;
 	}
 

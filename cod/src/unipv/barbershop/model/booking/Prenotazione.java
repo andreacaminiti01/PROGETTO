@@ -1,6 +1,6 @@
 package unipv.barbershop.model.booking;
 
-
+import unipv.barbershop.model.user.Exception.EmptyFieldException;
 import unipv.barbershop.model.user.Cliente;
 import unipv.barbershop.model.staff.Barbiere; 
 import java.time.LocalDateTime;
@@ -18,9 +18,9 @@ public class Prenotazione {
 	
 	public Prenotazione(Cliente cliente, Barbiere barbiere, LocalDateTime dataOra) {
 		super();
-		this.cliente = cliente;
-		this.barbiere = barbiere;
-		this.dataOra = dataOra;
+		this.setCliente(cliente);
+		this.setBarbiere(barbiere);
+		this.setDataOra(dataOra);
 		this.serviziScelti = new ArrayList<>();
 	}
 
@@ -62,6 +62,10 @@ public class Prenotazione {
 	}
 
 	public void setCliente(Cliente cliente) {
+		if (cliente == null) {
+            // Blocchiamo chi prova a prenotare senza un cliente associato
+            throw new EmptyFieldException("Cliente");
+        }
 		this.cliente = cliente;
 	}
 
@@ -70,6 +74,9 @@ public class Prenotazione {
 	}
 
 	public void setBarbiere(Barbiere barbiere) {
+		if (barbiere == null) {
+			throw new EmptyFieldException("Barbiere");
+		}
 		this.barbiere = barbiere;
 	}
 	
@@ -78,6 +85,9 @@ public class Prenotazione {
 	}
 
 	public void setDataOra(LocalDateTime dataOra) {
+		if (dataOra == null) {
+			throw new EmptyFieldException("Data e Ora");
+		}
 		this.dataOra = dataOra;
 	}
 
@@ -85,7 +95,7 @@ public class Prenotazione {
 		return serviziScelti;
 	}
 
-	public void setServiziScelti(List<Servizio> serviziScelti) {
+	public void setServiziScelti(List<Servizio> serviziScelti) {	
 		this.serviziScelti = serviziScelti;
 	}
 

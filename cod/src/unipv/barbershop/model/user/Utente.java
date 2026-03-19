@@ -1,5 +1,6 @@
 package unipv.barbershop.model.user;
-
+import unipv.barbershop.model.user.Exception.InvalidFormatException;
+import unipv.barbershop.model.user.Exception.EmptyFieldException;
 /**
  * Superclasse astratta che rappresenta un utente generico del sistema.
  * Contiene gli attributi comuni a tutti gli attori (Cliente, Barbiere, Amministratore).
@@ -49,7 +50,7 @@ public abstract class Utente {
 
 	public void setNome(String nome) {
 		if (nome == null || nome.trim().isEmpty()) {
-	        throw new IllegalArgumentException("Il nome non può essere vuoto.");
+	        throw new EmptyFieldException ("Il nome non può essere vuoto.");
 	    }
 		this.nome = nome;
 	}
@@ -62,7 +63,7 @@ public abstract class Utente {
 
 	public void setCognome(String cognome) {
 		if (cognome == null || cognome.trim().isEmpty()) {
-	        throw new IllegalArgumentException("Il cognome non può essere vuoto.");
+	        throw new EmptyFieldException("Il cognome non può essere vuoto.");
 	    }
 		this.cognome = cognome;
 	}
@@ -77,7 +78,7 @@ public abstract class Utente {
 		// Controllo base: se l'email è null, vuota, o non contiene la "@", lancio l'eccezione
 	    if (email == null || email.trim().isEmpty() || !email.contains("@")) {
 	        // Uso l'eccezione non controllata (Runtime) suggerita dal professore
-	        throw new IllegalArgumentException("Formato email non valido: " + email);
+	        throw new InvalidFormatException("Formato email non valido: " + email);
 	    }
 		this.email = email;
 	}
@@ -92,7 +93,7 @@ public abstract class Utente {
 		// Controllo: la password non deve essere nulla, vuota, o più corta di 6 caratteri
 	    if (password == null || password.trim().isEmpty() || password.length() < 6) {
 	        // Genera l'eccezione perché l'argomento passato è inappropriato
-	        throw new IllegalArgumentException("Errore: la password non può essere vuota e deve avere almeno 6 caratteri.");
+	        throw new InvalidFormatException("Errore: la password non può essere vuota e deve avere almeno 6 caratteri.");
 	    }
 		this.password = password;
 	}
