@@ -7,8 +7,6 @@ public class DBConnection {
 	private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver"; 
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/"; 
 	private static final String USERNAME = "root"; 
-
-	// ATTENZIONE: INSERISCI QUI TRA LE VIRGOLETTE LA PASSWORD DI MYSQL WORKBENCH
 	private static final String PASSWORD = "MysqlDB2025!"; 
 
 	// Metodo per APRIRE la connessione
