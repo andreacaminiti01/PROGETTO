@@ -43,58 +43,67 @@ public abstract class Utente {
 	}
 
 
-	
+
 	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nome) {
 		if (nome == null || nome.trim().isEmpty()) {
-	        throw new EmptyFieldException ("Il nome non può essere vuoto.");
-	    }
+			throw new EmptyFieldException ("Il nome non può essere vuoto.");
+		}
 		this.nome = nome;
 	}
 
 
-	
+
 	public String getCognome() {
 		return cognome;
 	}
 
 	public void setCognome(String cognome) {
 		if (cognome == null || cognome.trim().isEmpty()) {
-	        throw new EmptyFieldException("Il cognome non può essere vuoto.");
-	    }
+			throw new EmptyFieldException("Il cognome non può essere vuoto.");
+		}
 		this.cognome = cognome;
 	}
 
 
-	
+
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public void setEmail(String email) {
 		// Controllo base: se l'email è null, vuota, o non contiene la "@", lancio l'eccezione
-	    if (email == null || email.trim().isEmpty() || !email.contains("@")) {
-	        // Uso l'eccezione non controllata (Runtime) suggerita dal professore
-	        throw new InvalidFormatException("Formato email non valido: " + email);
-	    }
+		if (email == null || email.trim().isEmpty() || !email.contains("@")) {
+			// Uso l'eccezione non controllata (Runtime) suggerita dal professore
+			throw new InvalidFormatException("Formato email non valido: " + email);
+		}
 		this.email = email;
 	}
 
-
-	
 	public String getPassword() {
 		return password;
 	}
 
+	// Metodo di base: di default un utente generico non ha telefono
+	public String getTelefono() {
+		return null; 
+	}
+
+	// Metodo di base: facciamo restituire un ruolo generico 
+	// (Se la classe Utente è "abstract", puoi fare direttamente un metodo astratto!)
+	public String getRuolo() {
+		return "UTENTE"; 
+	}
+
 	public void setPassword(String password) {
 		// Controllo: la password non deve essere nulla, vuota, o più corta di 6 caratteri
-	    if (password == null || password.trim().isEmpty() || password.length() < 6) {
-	        // Genera l'eccezione perché l'argomento passato è inappropriato
-	        throw new InvalidFormatException("Errore: la password non può essere vuota e deve avere almeno 6 caratteri.");
-	    }
+		if (password == null || password.trim().isEmpty() || password.length() < 6) {
+			// Genera l'eccezione perché l'argomento passato è inappropriato
+			throw new InvalidFormatException("Errore: la password non può essere vuota e deve avere almeno 6 caratteri.");
+		}
 		this.password = password;
 	}
 

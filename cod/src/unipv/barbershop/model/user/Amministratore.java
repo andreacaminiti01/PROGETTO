@@ -13,7 +13,7 @@ public class Amministratore extends Utente {
 	}
 
 	public String getRuolo() {
-		return ruolo;
+		return"AMMINISTRATORE";
 	}
 
 	public void setRuolo(String ruolo) {

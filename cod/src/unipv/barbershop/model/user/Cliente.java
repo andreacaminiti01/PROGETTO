@@ -23,6 +23,14 @@ public class Cliente extends Utente {
 	}
 
 	@Override
+	public String getRuolo() {
+		// TODO Auto-generated method stub
+		return "CLIENTE";
+	}
+
+
+
+	@Override
 	public String toString() {
 		return "Cliente:" + getNome() + "" + getCognome() + "(" + getEmail() +")";
 	}
