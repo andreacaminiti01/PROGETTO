@@ -4,7 +4,7 @@ import unipv.barbershop.database.DBConnection;
 import unipv.barbershop.model.user.Utente;
 import unipv.barbershop.model.user.Cliente;
 import unipv.barbershop.model.user.Amministratore;
-import unipv.barbershop.model.user.Exception.CredenzialiErrateException;
+import unipv.barbershop.model.user.exception.CredenzialiErrateException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

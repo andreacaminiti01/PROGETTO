@@ -1,5 +1,5 @@
 package unipv.barbershop.dao.daoBookingServizio;
-import java.util.ArrayList;
+import java.util.List;
 import unipv.barbershop.model.booking.Servizio;
 
 public interface IServizioDAO {
@@ -7,5 +7,5 @@ public interface IServizioDAO {
 		boolean inserisciServizio(Servizio servizio);
 		
 		// Recupera il "Listino Prezzi" completo
-		ArrayList<Servizio> recuperaTuttiIServizi();
+		List<Servizio> recuperaTuttiIServizi();
 }
