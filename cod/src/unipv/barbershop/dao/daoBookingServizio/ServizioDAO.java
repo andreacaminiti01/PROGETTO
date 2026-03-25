@@ -15,7 +15,7 @@ public class ServizioDAO implements IServizioDAO {
 	private String schema;
 	private Connection conn;
 
-	public ServizioDAO(String schema) {
+	public ServizioDAO() {
 		super();
 		this.schema = "barbershop";
 	}
