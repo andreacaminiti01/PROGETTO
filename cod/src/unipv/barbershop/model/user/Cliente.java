@@ -36,7 +36,15 @@ public class Cliente extends Utente {
 	}
 
 
+	@Override
+	public String getTipoDatabase() {
+	    return "CLIENTE";
+	}
 
+	@Override
+	public String getDettaglioRuolo() {
+	    return null; // Il cliente non ha un ruolo speciale
+	}
 
 
 

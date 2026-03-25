@@ -19,6 +19,16 @@ public class Amministratore extends Utente {
 	public void setRuolo(String ruolo) {
 		this.ruolo = ruolo;
 	}
+	
+	@Override
+	public String getTipoDatabase() {
+	    return "AMMINISTRATORE";
+	}
+
+	@Override
+	public String getDettaglioRuolo() {
+	    return this.ruolo; // Restituisce la variabile ruolo (es. "Proprietario")
+	}
 
 	
 	

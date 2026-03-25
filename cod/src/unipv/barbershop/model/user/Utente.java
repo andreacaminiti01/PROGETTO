@@ -106,6 +106,12 @@ public abstract class Utente {
 		}
 		this.password = password;
 	}
+	
+	public abstract String getTipoDatabase(); 
+	// Restituirà "CLIENTE" o "AMMINISTRATORE"
+
+	public abstract String getDettaglioRuolo(); 
+	// Restituirà null per il cliente, e il ruolo vero e proprio per l'admin
 
 
 
