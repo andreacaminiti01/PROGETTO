@@ -1,4 +1,4 @@
-package unipv.barbershop.model.booking.Exception;
+package unipv.barbershop.model.booking.exception;
 
 public class PostiEsauritiException extends RuntimeException {
 

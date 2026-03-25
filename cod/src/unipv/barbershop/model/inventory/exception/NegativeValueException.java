@@ -1,4 +1,4 @@
-package unipv.barbershop.model.inventory.Exception;
+package unipv.barbershop.model.inventory.exception;
 
 public class NegativeValueException extends RuntimeException {
 
