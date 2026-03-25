@@ -11,6 +11,14 @@ CREATE TABLE utenti (
    tipo VARCHAR(20) NOT NULL;
 );
 
+-- Tabella Barbieri
+CREATE TABLE barbieri (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    cognome VARCHAR(50) NOT NULL,
+    specializzazione VARCHAR(100)
+);
+
 -- Tabella per ProdottoDAO (Il magazzino)
 CREATE TABLE prodotti (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,12 +38,12 @@ CREATE TABLE servizi (
 CREATE TABLE prenotazioni (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT NOT NULL,
-    id_servizio INT NOT NULL,
+      id_barbiere INT NOT NULL,  
     data_ora DATETIME NOT NULL,
     
     -- Collegamenti (Foreign Keys): colleghiamo l'appuntamento al cliente e al servizio
     FOREIGN KEY (id_cliente) REFERENCES utenti(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_servizio) REFERENCES servizi(id) ON DELETE CASCADE
+    FOREIGN KEY (id_barbiere) REFERENCES barbieri(id) ON DELETE CASCADE
 );
 
 -- Tabella per FeedbackDAO (Le recensioni)
@@ -47,4 +55,13 @@ CREATE TABLE feedback (
     
     -- Collegamento: ogni recensione appartiene a un cliente
     FOREIGN KEY (id_cliente) REFERENCES utenti(id) ON DELETE CASCADE
+);
+-- organizza più servizi per una prenotazione
+CREATE TABLE IF NOT EXISTS prenotazioni_servizi (
+    id_prenotazione INT NOT NULL,
+    id_servizio INT NOT NULL,
+    
+    PRIMARY KEY (id_prenotazione, id_servizio),
+    FOREIGN KEY (id_prenotazione) REFERENCES prenotazioni(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_servizio) REFERENCES servizi(id) ON DELETE CASCADE
 );
