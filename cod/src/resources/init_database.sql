@@ -8,7 +8,7 @@ CREATE TABLE utenti (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     ruolo VARCHAR(20) NOT NULL,
-    telefono VARCHAR(20) -- Può essere vuoto (null) per gli amministratori
+   tipo VARCHAR(20) NOT NULL;
 );
 
 -- Tabella per ProdottoDAO (Il magazzino)
