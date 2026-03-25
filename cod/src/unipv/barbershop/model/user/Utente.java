@@ -1,6 +1,6 @@
 package unipv.barbershop.model.user;
-import unipv.barbershop.model.user.Exception.InvalidFormatException;
-import unipv.barbershop.model.user.Exception.EmptyFieldException;
+import unipv.barbershop.model.user.exception.EmptyFieldException;
+import unipv.barbershop.model.user.exception.InvalidFormatException;
 /**
  * Superclasse astratta che rappresenta un utente generico del sistema.
  * Contiene gli attributi comuni a tutti gli attori (Cliente, Barbiere, Amministratore).

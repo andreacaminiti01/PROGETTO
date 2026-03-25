@@ -1,4 +1,4 @@
-package unipv.barbershop.model.user.Exception;
+package unipv.barbershop.model.user.exception;
 
 public class EmptyFieldException extends RuntimeException {
 	public EmptyFieldException(String campo) {

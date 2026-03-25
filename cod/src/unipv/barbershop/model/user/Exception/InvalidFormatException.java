@@ -1,4 +1,4 @@
-package unipv.barbershop.model.user.Exception;
+package unipv.barbershop.model.user.exception;
 
 public class InvalidFormatException extends RuntimeException {
 	public InvalidFormatException(String messaggio) {

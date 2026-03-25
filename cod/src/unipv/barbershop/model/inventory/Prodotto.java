@@ -1,6 +1,6 @@
 package unipv.barbershop.model.inventory;
 import unipv.barbershop.model.inventory.Exception.ScortaInsufficienteException;
-import unipv.barbershop.model.user.Exception.EmptyFieldException;
+import unipv.barbershop.model.user.exception.EmptyFieldException;
 import unipv.barbershop.model.inventory.Exception.NegativeValueException;
 
 public class Prodotto {

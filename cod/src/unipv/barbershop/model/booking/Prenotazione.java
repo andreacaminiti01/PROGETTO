@@ -1,7 +1,7 @@
 package unipv.barbershop.model.booking;
 
-import unipv.barbershop.model.user.Exception.EmptyFieldException;
 import unipv.barbershop.model.user.Cliente;
+import unipv.barbershop.model.user.exception.EmptyFieldException;
 import unipv.barbershop.model.staff.Barbiere; 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
