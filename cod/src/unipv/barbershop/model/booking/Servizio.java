@@ -45,13 +45,13 @@ public class Servizio {
 	}
 
 	public int getDurataMinuti() {
-		if (durataMinuti <= 0) {
-	        throw new IllegalArgumentException("La durata del servizio deve essere maggiore di zero.");
-	    }
 		return durataMinuti;
 	}
 
 	public void setDurataMinuti(int durataMinuti) {
+		if (durataMinuti <= 0) {
+	        throw new IllegalArgumentException("La durata del servizio deve essere maggiore di zero.");
+	    }
 		this.durataMinuti = durataMinuti;
 	}
 	
