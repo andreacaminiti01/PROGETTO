@@ -27,7 +27,7 @@ public class ProdottoDAO implements IProdottoDAO {
         boolean esito = false;
 
         try {
-            this.conn = DBConnection.startConnection(this.conn, this.schema);
+        	conn = DBConnection.getInstance().startConnection(schema);
             String query = "INSERT INTO prodotti (nome, quantitaInScorta) VALUES (?, ?)";
             ps = this.conn.prepareStatement(query);
             ps.setString(1, prodotto.getNome());
@@ -41,7 +41,7 @@ public class ProdottoDAO implements IProdottoDAO {
         } finally {
             // IL FINALLY SALVA LA VITA AL DATABASE!
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.closeConnection(this.conn);
+            DBConnection.getInstance().closeConnection(conn);
         }
         return esito;
     }
@@ -53,7 +53,7 @@ public class ProdottoDAO implements IProdottoDAO {
         List<Prodotto> inventario = new ArrayList<>();
 
         try {
-            this.conn = DBConnection.startConnection(this.conn, this.schema);
+        	conn = DBConnection.getInstance().startConnection(schema);
             String query = "SELECT * FROM prodotti";
             ps = this.conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -70,7 +70,7 @@ public class ProdottoDAO implements IProdottoDAO {
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.closeConnection(this.conn);
+            DBConnection.getInstance().closeConnection(conn);
         }
         return inventario;
     }
@@ -81,7 +81,7 @@ public class ProdottoDAO implements IProdottoDAO {
         boolean esito = false;
 
         try {
-            this.conn = DBConnection.startConnection(this.conn, this.schema);
+        	conn = DBConnection.getInstance().startConnection(schema);
             String query = "UPDATE prodotti SET quantitaInScorta = ? WHERE id = ?";
             ps = this.conn.prepareStatement(query);
             ps.setInt(1, nuovaQuantita);
@@ -94,7 +94,7 @@ public class ProdottoDAO implements IProdottoDAO {
             e.printStackTrace();
         } finally {
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.closeConnection(this.conn);
+            DBConnection.getInstance().closeConnection(conn);
         }
         return esito;
     }

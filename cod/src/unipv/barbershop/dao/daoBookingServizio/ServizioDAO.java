@@ -26,7 +26,7 @@ public class ServizioDAO implements IServizioDAO {
         boolean esito = false;
 
         try {
-            this.conn = DBConnection.startConnection(this.conn, this.schema);
+        	conn = DBConnection.getInstance().startConnection(schema);
             String query = "INSERT INTO servizi (nome, prezzo, durataMinuti) VALUES (?, ?, ?)";
             ps = this.conn.prepareStatement(query);
 
@@ -42,7 +42,7 @@ public class ServizioDAO implements IServizioDAO {
         } finally {
             // SICUREZZA ASSOLUTA: Chiudiamo sempre tutto!
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.closeConnection(this.conn);
+            DBConnection.getInstance().closeConnection(conn);
         }
         return esito;
     }
@@ -54,7 +54,7 @@ public class ServizioDAO implements IServizioDAO {
         List<Servizio> listino = new ArrayList<>();
 
         try {
-            this.conn = DBConnection.startConnection(this.conn, this.schema);
+        	conn = DBConnection.getInstance().startConnection(schema);
             String query = "SELECT * FROM servizi";
             ps = this.conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -72,7 +72,7 @@ public class ServizioDAO implements IServizioDAO {
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.closeConnection(this.conn);
+            DBConnection.getInstance().closeConnection(conn);
         }
         return listino;
     }

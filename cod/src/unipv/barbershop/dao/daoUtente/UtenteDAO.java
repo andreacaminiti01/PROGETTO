@@ -31,7 +31,7 @@ public class UtenteDAO implements IUtenteDAO {
 
         try {
             // Uso this.conn e this.schema definiti all'inizio!
-            this.conn = DBConnection.startConnection(this.conn, this.schema);
+        	conn = DBConnection.getInstance().startConnection(schema);
             // Prepariamo la query con i punti di domanda (?)
 			// I punti di domanda sono fondamentali: evitano che gli hacker blocchino il database!
             String query = "INSERT INTO utenti (nome, cognome, email, password, tipo, ruolo) VALUES (?, ?, ?, ?, ?, ?)";
@@ -53,7 +53,7 @@ public class UtenteDAO implements IUtenteDAO {
         } finally {//chiudendo nel finally ci assicuriamo che il ResultSet e la Connection vengano chiusi sempre e comunque, anche in caso di problemi nel try-catch
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
             // Chiudo la connessione di istanza
-            DBConnection.closeConnection(this.conn);
+            DBConnection.getInstance().closeConnection(conn);
         }
     }
 
@@ -64,7 +64,7 @@ public class UtenteDAO implements IUtenteDAO {
         Utente utenteTrovato = null;
 
         try {
-            this.conn = DBConnection.startConnection(this.conn, this.schema);
+        	conn = DBConnection.getInstance().startConnection(schema);
             String query = "SELECT * FROM utenti WHERE email = ? AND password = ?";
             ps = this.conn.prepareStatement(query);
             ps.setString(1, email);
@@ -107,7 +107,7 @@ public class UtenteDAO implements IUtenteDAO {
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.closeConnection(this.conn);
+            DBConnection.getInstance().closeConnection(conn);
         }
         
         return utenteTrovato;
@@ -121,7 +121,7 @@ public class UtenteDAO implements IUtenteDAO {
         List<Utente> listaUtenti = new ArrayList<>();
 
         try {
-            this.conn = DBConnection.startConnection(this.conn, this.schema);
+        	conn = DBConnection.getInstance().startConnection(schema);
             String query = "SELECT * FROM utenti";
             ps = this.conn.prepareStatement(query);
             rs = ps.executeQuery();
@@ -156,7 +156,7 @@ public class UtenteDAO implements IUtenteDAO {
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.closeConnection(this.conn);
+            DBConnection.getInstance().closeConnection(conn);
         }
         
         return listaUtenti;

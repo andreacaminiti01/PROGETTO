@@ -50,11 +50,13 @@ CREATE TABLE prenotazioni (
 CREATE TABLE feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT NOT NULL,
+    id_prenotazione INT NOT NULL,
     voto INT NOT NULL, -- Da 1 a 5 stelle
     commento TEXT,
     
     -- Collegamento: ogni recensione appartiene a un cliente
     FOREIGN KEY (id_cliente) REFERENCES utenti(id) ON DELETE CASCADE
+    FOREIGN KEY (id_prenotazione) REFERENCES prenotazioni(id) ON DELETE CASCADE
 );
 -- organizza più servizi per una prenotazione
 CREATE TABLE IF NOT EXISTS prenotazioni_servizi (
