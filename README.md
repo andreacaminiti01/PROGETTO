@@ -14,7 +14,6 @@ Lo scopo principale di questo progetto è sviluppare un sistema informatico comp
 
 ---
 
-
 ## 🚀 Funzionalità Principali
 
 Attualmente, il sistema modella le seguenti aree di business:
@@ -47,11 +46,37 @@ Il codice è organizzato in package tematici per garantire modularità e pulizia
 * `unipv.barbershop.model.booking`: Logica legata agli appuntamenti (`Prenotazione`, `Servizio`).
 * `unipv.barbershop.model.inventory`: Gestione risorse fisiche (`Prodotto`).
 * `unipv.barbershop.model.feedback`: Gestione recensioni (`Feedback`).
-* `unipv.barbershop.dao`: (*Work in progress*) Interfacce e implementazioni per l'accesso ai dati.
 
-## 🚧 Stato dello Sviluppo
+## 🛠️ Tecnologie e Pattern Implementati
 
-- [x] Progettazione e implementazione dei Model (Domain Objects).
-- [x] Implementazione del Data Access Object (DAO) pattern.
-- [x] Configurazione connessione al Database e relative eccezioni.
-- [x] Sviluppo logica di business e View.
+### 1. Singleton & Gestione della Connessione
+* **Pattern Singleton**: La classe `DBConnection` assicura l'esistenza di un'unica istanza del gestore del database, ottimizzando la lettura dei file di configurazione e il consumo di risorse.
+* **Configurazione Esterna**: Le credenziali (URL, user, password) sono caricate dal file `db.properties`. Per sicurezza, questo file è escluso dal versionamento tramite `.gitignore`.
+
+### 2. Robustezza e Transazioni SQL (Core Logic)
+* **Transazioni ACID**: Il metodo `salvaPrenotazione` nel `PrenotazioneDAO` gestisce operazioni atomiche. Utilizza `setAutoCommit(false)`, `commit()` e `rollback()` per garantire che la prenotazione e i relativi servizi (tabella ponte) vengano salvati correttamente insieme, evitando dati inconsistenti in caso di errore.
+* **Prevenzione SQL Injection**: Tutte le interazioni con il DB avvengono tramite `PreparedStatement` per sanificare l'input.
+* **Check Disponibilità**: Il sistema verifica se il barbiere è libero nella fascia oraria selezionata tramite `isBarbiereDisponibile` prima di confermare l'appuntamento.
+
+### 3. Gestione delle Eccezioni (Business Rules)
+Il backend utilizza eccezioni di tipo `RuntimeException` per far rispettare le regole del dominio in modo pulito:
+* **`PostiEsauritiException`**: Lanciata se il barbiere è già occupato.
+* **`ScortaInsufficienteException`**: Impedisce la riduzione del magazzino se il prodotto è esaurito.
+* **`CredenzialiErrateException`**: Gestisce i fallimenti del login in modo sicuro.
+* **`InvalidFormatException` & `EmptyFieldException`**: Validano email, password e campi obbligatori durante l'istanziazione degli oggetti.
+
+## 🚀 Istruzioni per il Setup (Collaboratori)
+
+Per rendere il progetto operativo sulla propria macchina locale:
+
+1.  **Database**: Eseguire lo script `init_database.sql` in MySQL Workbench per generare lo schema `barbershop` e tutte le tabelle (incluse Foreign Keys e vincoli `ON DELETE CASCADE`).
+2.  **Configurazione**: Creare un file denominato `db.properties` nella cartella root del progetto con il seguente schema:
+    ```properties
+    db.url=jdbc:mysql://localhost:3306/barbershop
+    db.user=IL_TUO_USERNAME
+    db.password=LA_TUA_PASSWORD
+    ```
+3.  **Librerie**: Assicurarsi che il driver JDBC (`mysql-connector-j`) sia incluso nel Build Path del progetto.
+
+---
+*Backend sviluppato seguendo gli standard di Ingegneria del Software - Università di Pavia.*
