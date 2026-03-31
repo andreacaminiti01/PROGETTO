@@ -24,7 +24,7 @@ public class Cliente extends Utente {
 
 	@Override
 	public String getRuolo() {
-		// TODO Auto-generated method stub
+		
 		return "CLIENTE";
 	}
 

@@ -68,6 +68,7 @@ public class Prenotazione {
         }
 		this.cliente = cliente;
 	}
+	
 
 	public Barbiere getBarbiere() {
 		return barbiere;
