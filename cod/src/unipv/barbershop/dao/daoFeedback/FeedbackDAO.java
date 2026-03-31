@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import unipv.barbershop.model.feedback.Feedback;
 import unipv.barbershop.database.DBConnection;
-import unipv.barbershop.model.feedback.Feedback;
 import unipv.barbershop.model.user.Cliente;
 
 public class FeedbackDAO implements IFeedbcakDAO {
