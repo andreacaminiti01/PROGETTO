@@ -17,7 +17,6 @@ public class UtenteDAO implements IUtenteDAO {
 
     // 1. VARIABILI DI ISTANZA (
     private String schema;
-    private Connection conn;
 
     // 2. COSTRUTTORE 
     public UtenteDAO() {
@@ -28,21 +27,26 @@ public class UtenteDAO implements IUtenteDAO {
     @Override
     public void inserisciUtente(Utente utente) {
         PreparedStatement ps = null; // Il "corriere" nasce e muore nel metodo
+        Connection connLocale = null; // 1. Variabile locale
 
         try {
-            // Uso this.conn e this.schema definiti all'inizio!
-        	conn = DBConnection.getInstance().startConnection(schema);
-            // Prepariamo la query con i punti di domanda (?)
-			// I punti di domanda sono fondamentali: evitano che gli hacker blocchino il database!
+            // 2. Apriamo la connessione specifica per questa INSERT
+            connLocale = DBConnection.getInstance().startConnection(schema);
+            
+            if (connLocale == null) {
+                System.err.println("Errore: Impossibile connettersi al DB per l'inserimento.");
+                return;
+            }
+
             String query = "INSERT INTO utenti (nome, cognome, email, password, tipo, ruolo) VALUES (?, ?, ?, ?, ?, ?)";
-            ps = this.conn.prepareStatement(query);
+            ps = connLocale.prepareStatement(query); // 3. Usiamo connLocale
             
             ps.setString(1, utente.getNome());
             ps.setString(2, utente.getCognome());
             ps.setString(3, utente.getEmail());
             ps.setString(4, utente.getPassword());
 
-            // POLIMORFISMO: Chiedo all'oggetto di dirmi chi è
+            // POLIMORFISMO: Chiedo all'oggetto di dirmi chi è (CLIENTE o AMMINISTRATORE)
             ps.setString(5, utente.getTipoDatabase());
             ps.setString(6, utente.getDettaglioRuolo());
 
@@ -50,10 +54,10 @@ public class UtenteDAO implements IUtenteDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {//chiudendo nel finally ci assicuriamo che il ResultSet e la Connection vengano chiusi sempre e comunque, anche in caso di problemi nel try-catch
+        } finally {
+            // 4. Pulizia totale
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            // Chiudo la connessione di istanza
-            DBConnection.getInstance().closeConnection(conn);
+            DBConnection.getInstance().closeConnection(connLocale);
         }
     }
 
@@ -62,18 +66,29 @@ public class UtenteDAO implements IUtenteDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Utente utenteTrovato = null;
+     // 1. DICHIARIAMO LA CONNESSIONE QUI DENTRO (Variabile locale)
+        Connection connLocale = null; 
 
         try {
-        	conn = DBConnection.getInstance().startConnection(schema);
+            // 2. APRIAMO LA CONNESSIONE SOLO PER QUESTA OPERAZIONE
+            connLocale = DBConnection.getInstance().startConnection(schema);
+            
+            // Controlliamo che la connessione sia partita davvero
+            if (connLocale == null) {
+                System.err.println("Errore: Impossibile stabilire una connessione al DB!");
+                return null;
+            }
+
             String query = "SELECT * FROM utenti WHERE email = ? AND password = ?";
-            ps = this.conn.prepareStatement(query);
+            
+            // 3. USIAMO LA CONNESSIONE LOCALE
+            ps = connLocale.prepareStatement(query);
             ps.setString(1, email);
             ps.setString(2, password);
 
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                // Leggo la colonna tipo dal DB per capire chi sto loggando
                 String tipo = rs.getString("tipo");
 
                 if ("CLIENTE".equals(tipo)) {
@@ -92,41 +107,46 @@ public class UtenteDAO implements IUtenteDAO {
                     a.setCognome(rs.getString("cognome"));
                     a.setEmail(rs.getString("email"));
                     a.setPassword(rs.getString("password"));
-                    a.setRuolo(rs.getString("ruolo")); // L'admin ha anche il ruolo
+                    a.setRuolo(rs.getString("ruolo"));
                     utenteTrovato = a;
                 }
             } else {
-                // Se la tabella è vuota, l'utente ha sbagliato i dati!
                 throw new CredenzialiErrateException();
             }
 
         } catch (CredenzialiErrateException ce) {
-            throw ce; // Rilancio l'eccezione verso l'interfaccia grafica
+            throw ce; 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // 4. CHIUDIAMO TUTTO IN MODO PULITO
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.getInstance().closeConnection(conn);
+            
+            // Chiudiamo la connessione locale: così la prossima volta sarà di nuovo nuova!
+            DBConnection.getInstance().closeConnection(connLocale);
         }
         
         return utenteTrovato;
     }
-
     @Override
     public List<Utente> leggiTuttiGliUtenti() {
         PreparedStatement ps = null;
         ResultSet rs = null;
         // Uso l'interfaccia List ma creo concretamente un ArrayList
         List<Utente> listaUtenti = new ArrayList<>();
+        Connection connLocale = null; // 1. Variabile locale
 
         try {
-        	conn = DBConnection.getInstance().startConnection(schema);
+            // 2. Apriamo la connessione
+            connLocale = DBConnection.getInstance().startConnection(schema);
+            
+            if (connLocale == null) return listaUtenti;
+
             String query = "SELECT * FROM utenti";
-            ps = this.conn.prepareStatement(query);
+            ps = connLocale.prepareStatement(query); // 3. Usiamo connLocale
             rs = ps.executeQuery();
 
-            // Ciclo WHILE per scorrere tutta la tabella del database
             while (rs.next()) {
                 String tipo = rs.getString("tipo");
                 
@@ -154,9 +174,10 @@ public class UtenteDAO implements IUtenteDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            // 4. Chiusura di tutto il set di strumenti
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.getInstance().closeConnection(conn);
+            DBConnection.getInstance().closeConnection(connLocale);
         }
         
         return listaUtenti;
