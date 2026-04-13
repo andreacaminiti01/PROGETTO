@@ -9,7 +9,7 @@ import unipv.barbershop.model.feedback.Feedback;
 import unipv.barbershop.database.DBConnection;
 import unipv.barbershop.model.user.Cliente;
 
-public class FeedbackDAO implements IFeedbcakDAO {
+public class FeedbackDAO implements IFeedbackDAO {
 	private String schema = "barbershop";
 	private Connection conn;
 
