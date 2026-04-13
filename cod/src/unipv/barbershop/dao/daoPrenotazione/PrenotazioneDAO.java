@@ -2,6 +2,7 @@ package unipv.barbershop.dao.daoPrenotazione;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 
@@ -41,67 +42,82 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 
 	@Override
 	public boolean salvaPrenotazione(Prenotazione p) throws PostiEsauritiException {
-		// 1. PRIMA DI TUTTO: Controlliamo se c'è posto!
-		// Se il barbiere NON è disponibile, scatta subito la TUA eccezione e blocca tutto!
-		if (!isBarbiereDisponibile(p.getBarbiere().getId(), p.getDataOra())) {
-			throw new PostiEsauritiException();
-		}
+	    
+	    // 1. PRIMA DI TUTTO: Controlliamo se il barbiere è libero per quell'ora
+	    // Se non è disponibile, lanciamo l'eccezione personalizzata e il metodo si ferma qui
+	    if (!isBarbiereDisponibile(p.getBarbiere().getId(), p.getDataOra())) {
+	        throw new PostiEsauritiException();
+	    }
 
-		conn = DBConnection.getInstance().startConnection(schema);
-        boolean esito = false;
+	    // DICHIARIAMO GLI "ATTREZZI" FUORI DAL TRY: così il blocco finally potrà pulirli alla fine!
+	    Connection conn = null;
+	    PreparedStatement st1 = null; // Per la tabella prenotazioni
+	    PreparedStatement st2 = null; // Per la tabella ponte prenotazioni_servizi
+	    ResultSet rsKeys = null;      // Per recuperare l'ID appena creato
+	    boolean esito = false;
 
-		try {
-			// 2. INIZIO TRANSAZIONE: Spegniamo il salvataggio automatico
-			conn.setAutoCommit(false); 
+	    try {
+	        // 2. APRIAMO LA CONNESSIONE: Usiamo l'istanza Singleton
+	        conn = DBConnection.getInstance().startConnection(schema);
+	        
+	        // 3. INIZIO TRANSAZIONE: Diciamo a MySQL di non salvare nulla finché non diamo il comando finale (commit)
+	        conn.setAutoCommit(false); 
 
-			// 3. Salviamo i dati principali della prenotazione
-			String queryPrenotazione = "INSERT INTO prenotazioni (id_cliente, id_barbiere, data_ora) VALUES (?, ?, ?)";
-			PreparedStatement st1 = conn.prepareStatement(queryPrenotazione, Statement.RETURN_GENERATED_KEYS);
-			st1.setInt(1, p.getCliente().getId());
-			st1.setInt(2, p.getBarbiere().getId());
-			st1.setObject(3, p.getDataOra());
+	        // 4. SALVATAGGIO DATI BASE: Inseriamo cliente, barbiere e data/ora
+	        // Chiediamo a MySQL di restituirci l'ID che genererà (RETURN_GENERATED_KEYS)
+	        String queryPrenotazione = "INSERT INTO prenotazioni (id_cliente, id_barbiere, data_ora) VALUES (?, ?, ?)";
+	        st1 = conn.prepareStatement(queryPrenotazione, Statement.RETURN_GENERATED_KEYS);
+	        st1.setInt(1, p.getCliente().getId());
+	        st1.setInt(2, p.getBarbiere().getId());
+	        st1.setObject(3, p.getDataOra()); // Usiamo setObject per il LocalDateTime
 
-			st1.executeUpdate();
+	        st1.executeUpdate();
 
-			// 4. Recuperiamo l'ID appena generato da MySQL
-			ResultSet rsKeys = st1.getGeneratedKeys();
-			int idPrenotazione = -1;
-			if (rsKeys.next()) {
-				idPrenotazione = rsKeys.getInt(1);
-			}
+	        // 5. RECUPERO ID GENERATO: Prendiamo il numero identificativo appena creato da MySQL
+	        rsKeys = st1.getGeneratedKeys();
+	        int idPrenotazione = -1; // "Valore sentinella"
+	        if (rsKeys.next()) {
+	            idPrenotazione = rsKeys.getInt(1); // Ora idPrenotazione contiene l'ID vero (es. 15)
+	        }
 
-			// 5. Salviamo TUTTI i servizi scelti nella tabella ponte
-			String queryServizi = "INSERT INTO prenotazioni_servizi (id_prenotazione, id_servizio) VALUES (?, ?)";
-			PreparedStatement st2 = conn.prepareStatement(queryServizi);
+	        // 6. SALVATAGGIO SERVIZI (TABELLA PONTE): Colleghiamo la prenotazione ai servizi scelti
+	        String queryServizi = "INSERT INTO prenotazioni_servizi (id_prenotazione, id_servizio) VALUES (?, ?)";
+	        st2 = conn.prepareStatement(queryServizi);
 
-			// Usiamo il metodo getServiziScelti() !
-			for (Servizio s : p.getServiziScelti()) {
-				st2.setInt(1, idPrenotazione);
-				st2.setInt(2, s.getId());
-				st2.executeUpdate();
-			}
+	        // Cicliamo sulla lista di servizi scelti dal cliente
+	        for (Servizio s : p.getServiziScelti()) {
+	            st2.setInt(1, idPrenotazione);
+	            st2.setInt(2, s.getId());
+	            st2.executeUpdate(); // Ogni servizio diventa una riga nella tabella ponte
+	        }
 
-			// 6. TUTTO OK: Confermiamo il salvataggio nel database
-			conn.commit(); 
-			esito = true;
+	        // 7. FINE TRANSAZIONE: Se siamo arrivati qui senza errori, salviamo tutto definitivamente!
+	        conn.commit(); 
+	        esito = true;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				// SE C'È UN ERRORE: Annulliamo tutto e non salviamo niente a metà
-				if (conn != null) conn.rollback();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		} finally {
-			try {
-				if (conn != null) conn.setAutoCommit(true); // Riaccendiamo il salvataggio automatico
-			} catch (Exception e) {}
-			DBConnection.getInstance().closeConnection(conn);
-		}
+	    } catch (Exception e) {
+	        // 8. GESTIONE ERRORI: Se qualcosa va storto, annulliamo tutto quello che avevamo iniziato (Rollback)
+	        e.printStackTrace();
+	        try {
+	            if (conn != null) conn.rollback(); 
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	    } finally {
+	        // 9. PULIZIA TOTALE (IL FINALLY SALVA IL DB!): Chiudiamo tutto quello che abbiamo aperto
+	        try {
+	            if (conn != null) conn.setAutoCommit(true); // Riportiamo la connessione allo stato normale
+	        } catch (Exception e) {}
+	        
+	        // Chiudiamo i corrieri (Statement) e i risultati (ResultSet)
+	        try { if (rsKeys != null) rsKeys.close(); } catch (SQLException e) {}
+	        try { if (st1 != null) st1.close(); } catch (SQLException e) {}
+	        try { if (st2 != null) st2.close(); } catch (SQLException e) {}
+	        
+	        // Chiudiamo la connessione tramite il Singleton
+	        DBConnection.getInstance().closeConnection(conn);
+	    }
 
-		return esito;
+	    return esito;
 	}
-
-
 }
