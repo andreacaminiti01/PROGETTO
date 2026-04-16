@@ -1,4 +1,5 @@
 package unipv.barbershop.dao.daoUtente;
+import unipv.barbershop.model.staff.Barbiere;
 import unipv.barbershop.model.user.Utente;
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface IUtenteDAO {
     
     // Metodo per recuperare la lista di tutti gli utenti registrati
     List<Utente> leggiTuttiGliUtenti();
+    
+    public List<Barbiere> getTuttiIBarbieri();
 }

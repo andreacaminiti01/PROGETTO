@@ -13,8 +13,7 @@ import java.util.List;
 public class ServizioDAO implements IServizioDAO {
 
 	private String schema;
-	private Connection conn;
-
+	
 	public ServizioDAO() {
 		super();
 		this.schema = "barbershop";
@@ -24,11 +23,12 @@ public class ServizioDAO implements IServizioDAO {
     public boolean inserisciServizio(Servizio servizio) {
         PreparedStatement ps = null;
         boolean esito = false;
+        Connection connLocale = null; // CREATA LA CONNESSIONE LOCALE
 
         try {
-        	conn = DBConnection.getInstance().startConnection(schema);
+        	connLocale= DBConnection.getInstance().startConnection(schema);
             String query = "INSERT INTO servizi (nome, prezzo, durataMinuti) VALUES (?, ?, ?)";
-            ps = this.conn.prepareStatement(query);
+            ps = connLocale.prepareStatement(query);
 
             ps.setString(1, servizio.getNome());
             ps.setDouble(2, servizio.getPrezzo());
@@ -42,7 +42,7 @@ public class ServizioDAO implements IServizioDAO {
         } finally {
             // SICUREZZA ASSOLUTA: Chiudiamo sempre tutto!
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.getInstance().closeConnection(conn);
+            DBConnection.getInstance().closeConnection(connLocale);
         }
         return esito;
     }
@@ -52,11 +52,12 @@ public class ServizioDAO implements IServizioDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Servizio> listino = new ArrayList<>();
+        Connection connLocale = null; // CREATA LA CONNESSIONE LOCALE
 
         try {
-        	conn = DBConnection.getInstance().startConnection(schema);
+        	connLocale = DBConnection.getInstance().startConnection(schema);
             String query = "SELECT * FROM servizi";
-            ps = this.conn.prepareStatement(query);
+            ps = connLocale.prepareStatement(query);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -72,7 +73,7 @@ public class ServizioDAO implements IServizioDAO {
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.getInstance().closeConnection(conn);
+            DBConnection.getInstance().closeConnection(connLocale);
         }
         return listino;
     }

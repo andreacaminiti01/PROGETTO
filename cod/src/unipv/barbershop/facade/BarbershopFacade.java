@@ -2,11 +2,17 @@ package unipv.barbershop.facade;
 import unipv.barbershop.dao.daoUtente.*;
 import unipv.barbershop.dao.daoPrenotazione.*;
 import unipv.barbershop.dao.daoBookingServizio.*;
+import unipv.barbershop.dao.daoFeedback.FeedbackDAO;
+import unipv.barbershop.dao.daoFeedback.IFeedbackDAO;
 import unipv.barbershop.model.user.*;
 import unipv.barbershop.model.booking.*;
+import unipv.barbershop.model.booking.exception.PostiEsauritiException;
+import unipv.barbershop.model.feedback.Feedback;
+
 import java.util.List;
 import unipv.barbershop.dao.daoProdotto.*;
 import unipv.barbershop.model.inventory.*;
+import unipv.barbershop.model.staff.Barbiere;
 public class BarbershopFacade {
 	/**
 	 * Facade unificata per il sistema Barbershop.
@@ -24,6 +30,7 @@ public class BarbershopFacade {
 	private IPrenotazioneDAO prenotazioneDAO;
 	private IServizioDAO servizioDAO;
 	private IProdottoDAO prodottoDAO;
+	private IFeedbackDAO feedbackDAO;
 
 	// Costruttore privato (Singleton)
 	private BarbershopFacade() {
@@ -33,6 +40,7 @@ public class BarbershopFacade {
 		this.servizioDAO = new ServizioDAO();
 		this.isLoggedIn = false;
 		this.loggedUser = null;
+		this.feedbackDAO= new FeedbackDAO();
 	}
 
 	public static BarbershopFacade getInstance() {
@@ -100,5 +108,29 @@ public class BarbershopFacade {
 		return prodottoDAO.aggiornaScorta(p.getId(), p.getQuantitaInScorta());
 	}
 
+	public List<Barbiere> getBarbieriDisponibili() {
+	    // Chiama il DAO dei barbieri (o UtenteDAO filtrando per ruolo)
+	    return utenteDAO.getTuttiIBarbieri(); 
+	}
 
+	public List<Servizio> getServiziOfferti() {
+	    // Chiama il ServizioDAO per avere i prezzi e i nomi
+	    return servizioDAO.recuperaTuttiIServizi();
+	}
+
+	public boolean prenota(Prenotazione p) throws PostiEsauritiException {
+	    return prenotazioneDAO.salvaPrenotazione(p); // Usa il tuo DAO
+	}
+	
+	public boolean inviaFeedback(Feedback f) {
+	    // Supponendo che tu abbia istanziato feedbackDAO nel costruttore
+	    return feedbackDAO.salvaFeedback(f);
+	}
+	
+	public List<Prenotazione> getStoricoDettagliato() {
+	    // Recuperiamo il cliente loggato per sapere di chi cercare le prenotazioni
+	    Cliente c = (Cliente) this.getLoggedUser(); 
+	    // Chiamiamo il metodo del DAO che abbiamo aggiunto prima
+	    return prenotazioneDAO.recuperaPrenotazioniPerCliente(c.getId());
+	}
 }

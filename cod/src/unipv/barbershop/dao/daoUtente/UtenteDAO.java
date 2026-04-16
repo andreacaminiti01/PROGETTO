@@ -3,6 +3,7 @@ package unipv.barbershop.dao.daoUtente;
 import unipv.barbershop.database.DBConnection;
 import unipv.barbershop.model.user.Utente;
 import unipv.barbershop.model.user.Cliente;
+import unipv.barbershop.model.staff.Barbiere;
 import unipv.barbershop.model.user.Amministratore;
 import unipv.barbershop.model.user.exception.CredenzialiErrateException;
 
@@ -181,6 +182,41 @@ public class UtenteDAO implements IUtenteDAO {
         }
         
         return listaUtenti;
+    }
+    public List<Barbiere> getTuttiIBarbieri() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Barbiere> listaBarbieri = new ArrayList<>();
+        Connection connLocale = null;
+
+        try {
+            connLocale = DBConnection.getInstance().startConnection(schema);
+            if (connLocale == null) return listaBarbieri;
+
+            // Prende solo gli utenti che sono amministratori/barbieri
+            String query = "SELECT * FROM utenti WHERE tipo = 'AMMINISTRATORE'"; 
+            ps = connLocale.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Barbiere b = new Barbiere(); // Assicurati di avere l'import di Barbiere in alto!
+                b.setId(rs.getInt("id"));
+                b.setNome(rs.getString("nome"));
+                b.setCognome(rs.getString("cognome"));
+                // (Ignoriamo email e password perché per la tendina della prenotazione non ci servono)
+                
+                listaBarbieri.add(b);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException e) {}
+            try { if (ps != null) ps.close(); } catch (SQLException e) {}
+            DBConnection.getInstance().closeConnection(connLocale);
+        }
+        
+        return listaBarbieri;
     }
 }
 

@@ -10,6 +10,10 @@ import java.awt.event.ActionListener;
 
 
 public class FinestraLogin extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField txtEmail;
 	private JPasswordField txtPassword;
 	private JButton btnAccedi;
@@ -83,20 +87,14 @@ public class FinestraLogin extends JFrame {
 				String password = new String(txtPassword.getPassword());
 
 				// Chiamata al TUO Backend
+				// Il controller verifica i dati E apre automaticamente la Dashboard corretta!
 				if (loginController.gestisciLogin(email, password)) {
-					Utente u = BarbershopFacade.getInstance().getLoggedUser();
-					JOptionPane.showMessageDialog(FinestraLogin.this, "Accesso eseguito come: " + u.getRuolo());
-
-					dispose(); // Chiude il login
-
-					// Smistamento
-					if (u.getRuolo().equals("AMMINISTRATORE")) {
-						// TODO: Aprire schermata Magazzino
-					} else {
-						// TODO: Aprire schermata Cliente
-					}
+				    // Il login è andato bene e la Dashboard è già in fase di apertura grazie al Controller.
+				    // A noi resta solo da chiudere questa finestra di login per pulire lo schermo.
+				    dispose(); 
 				} else {
-					JOptionPane.showMessageDialog(FinestraLogin.this, "Credenziali errate!", "Errore", JOptionPane.ERROR_MESSAGE);
+				    // Se il login fallisce, il Controller restituisce false e noi mostriamo l'errore.
+				    JOptionPane.showMessageDialog(FinestraLogin.this, "Credenziali errate!", "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

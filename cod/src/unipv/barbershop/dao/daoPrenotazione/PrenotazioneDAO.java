@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import unipv.barbershop.database.DBConnection;
 import unipv.barbershop.model.booking.Prenotazione;
@@ -120,4 +122,54 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 
 	    return esito;
 	}
+	@Override
+	public List<Prenotazione> recuperaPrenotazioniPerCliente(int idCliente) {
+	    List<Prenotazione> lista = new ArrayList<>();
+	    // Usiamo una JOIN per prendere i dati della prenotazione E il nome del barbiere in un colpo solo
+	    String query = "SELECT p.*, u.nome AS nomeB, u.cognome AS cognomeB " +
+	                   "FROM prenotazioni p " +
+	                   "JOIN utenti u ON p.id_barbiere = u.id " +
+	                   "WHERE p.id_cliente = ? " + 
+	                   "ORDER BY p.data_ora DESC";
+	    
+	    Connection connLocale = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    try {
+	        connLocale = DBConnection.getInstance().startConnection(schema);
+	        ps = connLocale.prepareStatement(query);
+	        ps.setInt(1, idCliente);
+	        rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            // Creiamo l'oggetto Prenotazione base
+	            Prenotazione p = new Prenotazione();
+	            p.setId(rs.getInt("id"));
+	            
+	            // Convertiamo il Timestamp del DB nel tuo LocalDateTime
+	            p.setDataOra(rs.getTimestamp("data_ora").toLocalDateTime());
+	            
+	            // Creiamo l'oggetto Barbiere "dentro" la prenotazione
+	            unipv.barbershop.model.staff.Barbiere b = new unipv.barbershop.model.staff.Barbiere();
+	            b.setId(rs.getInt("id_barbiere"));
+	            b.setNome(rs.getString("nomeB"));
+	            b.setCognome(rs.getString("cognomeB"));
+	            
+	            p.setBarbiere(b);
+	            
+	            // Aggiungiamo alla lista che andrà alla JTable
+	            lista.add(p);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Pulizia standard come nei tuoi altri metodi
+	        try { if (rs != null) rs.close(); } catch (SQLException e) {}
+	        try { if (ps != null) ps.close(); } catch (SQLException e) {}
+	        DBConnection.getInstance().closeConnection(connLocale);
+	    }
+	    return lista;
+	}
+	
 }

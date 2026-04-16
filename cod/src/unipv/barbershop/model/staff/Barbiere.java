@@ -50,7 +50,11 @@ public class Barbiere {
     }
 	
 	
-	
+    @Override
+    public String toString() {
+        // Restituisce Nome e Cognome invece dell'indirizzo di memoria
+        return this.getNome() + " " + this.getCognome();
+    }
 	
 	
 	

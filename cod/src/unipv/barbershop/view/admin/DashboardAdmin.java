@@ -6,6 +6,10 @@ import unipv.barbershop.facade.BarbershopFacade;
 import unipv.barbershop.model.user.Utente;
 
 public class DashboardAdmin extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Bottoni per le funzioni amministrative
     private JButton btnGestioneMagazzino;
     private JButton btnVisualizzaPrenotazioni;

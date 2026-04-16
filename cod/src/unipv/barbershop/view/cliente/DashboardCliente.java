@@ -8,6 +8,10 @@ import unipv.barbershop.model.user.Utente;
 public class DashboardCliente extends JFrame {
 
     
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// I bottoni che il Controller dovrà "ascoltare"
     private JButton btnPrenota;
     private JButton btnFeedback;
