@@ -1,6 +1,4 @@
 package unipv.barbershop.view.account;
-import unipv.barbershop.facade.BarbershopFacade;
-import unipv.barbershop.model.user.Utente;
 import unipv.barbershop.controller.LoginController;
 import javax.swing.*;
 import java.awt.*;
