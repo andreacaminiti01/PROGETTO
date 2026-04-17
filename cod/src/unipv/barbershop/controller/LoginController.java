@@ -58,6 +58,7 @@ public class LoginController {
     private void apriDashboardAdmin() {
     	System.out.println("Apertura Pannello di Controllo Amministratore...");
         DashboardAdmin viewAdmin = new DashboardAdmin();
+        new DashboardAdminController(viewAdmin);
         viewAdmin.setVisible(true);
     }
 

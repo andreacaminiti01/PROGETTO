@@ -13,4 +13,8 @@ public interface IPrenotazioneDAO {
 	boolean salvaPrenotazione(Prenotazione p) throws PostiEsauritiException;
 
 	public List<Prenotazione> recuperaPrenotazioniPerCliente(int idCliente);
+
+	List<String[]> getElencoPrenotazioni();
+
+	
 }

@@ -133,4 +133,9 @@ public class BarbershopFacade {
 	    // Chiamiamo il metodo del DAO che abbiamo aggiunto prima
 	    return prenotazioneDAO.recuperaPrenotazioniPerCliente(c.getId());
 	}
+
+	public List<String[]> getElencoPrenotazioniAdmin() {
+		return prenotazioneDAO.getElencoPrenotazioni();
+	
+	}
 }
