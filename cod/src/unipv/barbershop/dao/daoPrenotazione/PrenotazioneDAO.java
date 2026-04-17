@@ -184,8 +184,8 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 	        String query = "SELECT p.data_ora, u.nome AS nome_cliente, u.cognome AS cognome_cliente, " +
 	                       "b.nome AS nome_barbiere " +
 	                       "FROM prenotazioni p " +
-	                       "JOIN utenti u ON p.id_cliente = u.id " +
-	                       "JOIN barbieri b ON p.id_barbiere = b.id " +
+	                       "LEFT JOIN utenti u ON p.id_cliente = u.id " +
+	                       "LEFT JOIN barbieri b ON p.id_barbiere = b.id " +
 	                       "ORDER BY p.data_ora DESC";
 	                       
 	        st = conn.prepareStatement(query);
