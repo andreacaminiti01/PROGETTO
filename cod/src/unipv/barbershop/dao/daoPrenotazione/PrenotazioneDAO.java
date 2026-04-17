@@ -171,5 +171,48 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 	    }
 	    return lista;
 	}
+	@Override
+	public List<String[]> getElencoPrenotazioni() {
+	    List<String[]> listaPrenotazioni = new ArrayList<>();
+	    Connection conn = null;
+	    PreparedStatement st = null;
+	    ResultSet rs = null;
+
+	    try {
+	        conn = DBConnection.getInstance().startConnection(schema);
+	        // Una query JOIN per unire i dati delle varie tabelle in modo leggibile
+	        String query = "SELECT p.data_ora, u.nome AS nome_cliente, u.cognome AS cognome_cliente, " +
+	                       "b.nome AS nome_barbiere " +
+	                       "FROM prenotazioni p " +
+	                       "JOIN utenti u ON p.id_cliente = u.id " +
+	                       "JOIN barbieri b ON p.id_barbiere = b.id " +
+	                       "ORDER BY p.data_ora DESC";
+	                       
+	        st = conn.prepareStatement(query);
+	        rs = st.executeQuery();
+
+	        while (rs.next()) {
+	            // Estraiamo i dati riga per riga
+	            String dataOra = rs.getString("data_ora");
+	            String cliente = rs.getString("nome_cliente") + " " + rs.getString("cognome_cliente");
+	            String barbiere = rs.getString("nome_barbiere");
+	            String servizi = "Servizi vari"; // Semplificato per ora
+	            
+	            // Creiamo un array di stringhe (che rappresenta una riga della tabella)
+	            String[] rigaTabella = {dataOra, cliente, barbiere, servizi};
+	            listaPrenotazioni.add(rigaTabella);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // Chiudiamo sempre le risorse!
+	        try { if (rs != null) rs.close(); } catch (SQLException e) {}
+	        try { if (st != null) st.close(); } catch (SQLException e) {}
+	        DBConnection.getInstance().closeConnection(conn);
+	    }
+	    return listaPrenotazioni;
+	}
+	
+	
 	
 }

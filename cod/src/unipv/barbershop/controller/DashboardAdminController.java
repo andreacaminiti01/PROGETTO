@@ -2,6 +2,7 @@ package unipv.barbershop.controller;
 
 import unipv.barbershop.view.admin.DashboardAdmin;
 import unipv.barbershop.view.admin.FinestraMagazzino;
+import unipv.barbershop.view.admin.FinestraVisualizzaPrenotazioni;
 import unipv.barbershop.view.account.FinestraLogin;
 import unipv.barbershop.facade.BarbershopFacade;
 import java.awt.event.ActionEvent;
@@ -37,11 +38,24 @@ public class DashboardAdminController {
 		vistaAdmin.getBtnVisualizzaPrenotazioni().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Per ora mettiamo un avviso (lo farete nel "futuro")
-                JOptionPane.showMessageDialog(vistaAdmin, 
-                    "Funzione in arrivo: Qui vedrai la tabella delle prenotazioni!", 
-                    "Lavori in corso", 
-                    JOptionPane.INFORMATION_MESSAGE);
+            	FinestraVisualizzaPrenotazioni vistaPrenotazioni = new FinestraVisualizzaPrenotazioni();
+                
+                // 2. Recuperiamo la lista di prenotazioni dal database tramite la Facade
+                java.util.List<String[]> datiPrenotazioni = BarbershopFacade.getInstance().getElencoPrenotazioniAdmin();
+                
+                // 3. Prendiamo il "modello" della tabella (il cervello dei dati)
+                javax.swing.table.DefaultTableModel model = vistaPrenotazioni.getTableModel();
+                
+                // 4. Puliamo la tabella (per sicurezza) e aggiungiamo le righe una ad una
+                model.setRowCount(0); 
+                for (String[] riga : datiPrenotazioni) {
+                    model.addRow(riga);
+                }
+                
+                // 5. Rendiamo la finestra visibile
+                vistaPrenotazioni.setVisible(true);
+            
+                
             }
         });
 		
