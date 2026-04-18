@@ -138,4 +138,14 @@ public class BarbershopFacade {
 		return prenotazioneDAO.getElencoPrenotazioni();
 	
 	}
+	
+	public List<Feedback> getTuttiIFeedback() {
+	    // Delega la chiamata al DAO dei feedback
+	    return feedbackDAO.recuperaTuttiIFeedback();
+	}
+	
+	public boolean aggiungiNuovoProdotto(Prodotto p) {
+	    // Chiama il metodo del DAO che esegue la INSERT INTO prodotti
+	    return prodottoDAO.inserisciProdotto(p);
+	}
 }

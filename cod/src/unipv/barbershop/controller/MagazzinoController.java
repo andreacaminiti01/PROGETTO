@@ -3,98 +3,139 @@ import unipv.barbershop.facade.BarbershopFacade;
 import unipv.barbershop.model.inventory.Prodotto;
 import unipv.barbershop.model.inventory.exception.*;
 import unipv.barbershop.model.inventory.exception.ScortaInsufficienteException;
-import unipv.barbershop.model.user.Utente;
+import unipv.barbershop.view.admin.FinestraMagazzino;
 
 import java.util.List;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 public class MagazzinoController {
 	private BarbershopFacade facade;
+	private FinestraMagazzino vista;
+	private List<Prodotto> inventarioAttuale; // Cache per evitare continue chiamate al DB
 
-	public MagazzinoController() {
-        this.facade = BarbershopFacade.getInstance();
-    }
+	public MagazzinoController(FinestraMagazzino vista) {
+		this.facade = BarbershopFacade.getInstance();
+		this.vista = vista;
 
-    /**
-     * Metodo per la Vista: fornisce la lista dei prodotti per riempire la tabella.
-     */
-    public List<Prodotto> getInventario() {
-        if (!isAdminLoggato()) {
-            System.out.println("Accesso negato: Solo gli amministratori possono visualizzare il magazzino.");
-            return null;
-        }
-        return facade.getTuttiIProdotti(); 
-    }
+		ricaricaTabella(); // Carica i dati appena si apre la finestra
+		inizializzaEventi();
+	}
 
-    /**
-     * Metodo per aggiungere nuove scorte (es. arrivo corriere).
-     */
-    public boolean rifornisciProdotto(Prodotto prodotto, int quantitaDaAggiungere) {
-        if (!isAdminLoggato()) return false;
+	private void inizializzaEventi() {
+		// TASTO RIFORNISCI (+)
+		vista.getBtnRifornisci().addActionListener(e -> gestisciOperazioneMagazzino(true));
 
-        if (prodotto == null || quantitaDaAggiungere <= 0) {
-            System.out.println("Errore: Selezionare un prodotto e inserire una quantità da aggiungere valida.");
-            return false;
-        }
+		// TASTO CONSUMA (-)
+		vista.getBtnConsuma().addActionListener(e -> gestisciOperazioneMagazzino(false));
 
-        try {
-            // Calcoliamo la nuova scorta e usiamo il tuo setter blindato
-            int nuovaQuantita = prodotto.getQuantitaInScorta() + quantitaDaAggiungere;
-            prodotto.setQuantitaInScorta(nuovaQuantita);
-            
-            // Salviamo nel Database tramite Facade
-            return facade.aggiornaProdotto(prodotto);
+		// TASTO INDIETRO
+		vista.getBtnTornaIndietro().addActionListener(e -> vista.dispose());
 
-        } catch (NegativeValueException e) {
-            // Questa intercetta il controllo che hai messo nel setQuantitaInScorta
-            System.out.println("Errore di validazione: " + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            System.out.println("Errore di sistema durante il rifornimento.");
-            return false;
-        }
-    }
+		vista.getTabellaProdotti().getSelectionModel().addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				int rigaSelezionata = vista.getTabellaProdotti().getSelectedRow();
+				if (rigaSelezionata != -1) {
+					// Prende l'ID dalla prima colonna (indice 0) della riga cliccata
+					String id = vista.getTabellaProdotti().getValueAt(rigaSelezionata, 0).toString();
+					vista.setIdProdottoText(id);
+				}
+			}
+		});
 
-    /**
-     * Metodo per registrare il consumo di un prodotto.
-     */
-    public boolean consumaProdotto(Prodotto prodotto, int quantitaUsata) {
-        if (!isAdminLoggato()) return false;
+		vista.getBtnAggiungiNuovo().addActionListener(e -> {
+			try {
+				String nome = vista.getNomeProdottoText().trim();
+				String qtaStr = vista.getQuantitaText().trim();
 
-        if (prodotto == null || quantitaUsata <= 0) {
-            System.out.println("Errore: Inserire una quantità valida da consumare.");
-            return false;
-        }
+				if (nome.isEmpty() || qtaStr.isEmpty()) {
+					JOptionPane.showMessageDialog(vista, "Errore: Inserisci il Nome e la Quantità iniziale!");
+					return;
+				}
 
-        try {
-            // Chiamiamo il tuo metodo esatto: se la scorta è poca, esplode la tua eccezione personalizzata!
-            prodotto.riduciScorta(quantitaUsata);
+				int quantita = Integer.parseInt(qtaStr);
 
-            // Se arriviamo qui, la scorta era sufficiente. Aggiorniamo il DB.
-            boolean successo = facade.aggiornaProdotto(prodotto);
-            
-            if (successo) {
-                System.out.println("Consumo registrato. Nuova scorta: " + prodotto.getQuantitaInScorta());
-                
-                // Sfruttiamo il tuo metodo isEsaurito per un bel popup di avviso per l'Admin!
-                if (prodotto.isEsaurito()) {
-                    System.out.println("ALERT MAGAZZINO: Il prodotto " + prodotto.getNome() + " è appena terminato! Rifornire al più presto.");
-                }
-            }
-            return successo;
+				// Creazione dell'oggetto Prodotto a oggetti
+				Prodotto nuovo = new Prodotto(nome, quantita);
 
-        } catch (ScortaInsufficienteException e) {
-            // La grafica di Fabio stamperà direttamente il messaggio che hai scritto nella classe dell'eccezione
-            System.out.println(e.getMessage()); 
-            return false;
-            
-        } catch (Exception e) {
-            System.out.println("Errore di connessione al database.");
-            return false;
-        }
-    }
+				// Salvataggio tramite Facade
+				if (facade.aggiungiNuovoProdotto(nuovo)) {
+					JOptionPane.showMessageDialog(vista, "Prodotto '" + nome + "' inserito con successo!");
+					vista.svuotaCampiTesto();
+					ricaricaTabella(); // Aggiorna la JTable con i dati freschi dal DB
+				} else {
+					JOptionPane.showMessageDialog(vista, "Errore durante l'inserimento nel database.");
+				}
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(vista, "La quantità deve essere un numero valido!");
+			}
+		});
+	}
 
-    // --- Metodo di utilità interno (Private) ---
-    private boolean isAdminLoggato() {
-        Utente utenteLoggato = facade.getLoggedUser();
-        return utenteLoggato != null && utenteLoggato.getRuolo().equals("AMMINISTRATORE");
-    }
+	private void gestisciOperazioneMagazzino(boolean isRifornimento) {
+		try {
+			// 1. Lettura e validazione input (Evita crash se l'utente scrive lettere!)
+			String strId = vista.getIdProdottoText().trim();
+			String strQta = vista.getQuantitaText().trim();
+
+			if (strId.isEmpty() || strQta.isEmpty()) {
+				JOptionPane.showMessageDialog(vista, "Compila ID e Quantità!", "Errore", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+
+			int idProdotto = Integer.parseInt(strId);
+			int quantita = Integer.parseInt(strQta);
+
+			// 2. Cerchiamo il prodotto nella lista
+			Prodotto prodottoSelezionato = inventarioAttuale.stream()
+					.filter(p -> p.getId() == idProdotto)
+					.findFirst()
+					.orElse(null);
+
+			if (prodottoSelezionato == null) {
+				JOptionPane.showMessageDialog(vista, "Prodotto non trovato!", "Errore", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			// 3. Esecuzione dell'operazione usando la tua logica a oggetti
+			boolean successo = false;
+			if (isRifornimento) {
+				prodottoSelezionato.setQuantitaInScorta(prodottoSelezionato.getQuantitaInScorta() + quantita);
+				successo = facade.aggiornaProdotto(prodottoSelezionato);
+			} else {
+				prodottoSelezionato.riduciScorta(quantita); // Questo lancia l'eccezione se le scorte sono poche!
+				successo = facade.aggiornaProdotto(prodottoSelezionato);
+			}
+
+			// 4. Feedback e aggiornamento
+			if (successo) {
+				JOptionPane.showMessageDialog(vista, "Operazione completata con successo!");
+				vista.svuotaCampiTesto();
+				ricaricaTabella(); // Ricarica i dati freschi dal DB
+
+				if (!isRifornimento && prodottoSelezionato.isEsaurito()) {
+					JOptionPane.showMessageDialog(vista, "ATTENZIONE: Il prodotto " + prodottoSelezionato.getNome() + " è esaurito!", "Allarme Scorte", JOptionPane.WARNING_MESSAGE);
+				}
+			} else {
+				JOptionPane.showMessageDialog(vista, "Errore durante il salvataggio nel DB.", "Errore", JOptionPane.ERROR_MESSAGE);
+			}
+
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(vista, "Inserisci numeri validi, non lettere!", "Errore formato", JOptionPane.ERROR_MESSAGE);
+		} catch (ScortaInsufficienteException | NegativeValueException ex) {
+			// Cattura le TUE eccezioni personalizzate e ne mostra il messaggio!
+			JOptionPane.showMessageDialog(vista, ex.getMessage(), "Operazione negata", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void ricaricaTabella() {
+		inventarioAttuale = facade.getTuttiIProdotti();
+		DefaultTableModel model = vista.getTableModel();
+		model.setRowCount(0); // Svuota la tabella vecchia
+
+		for (Prodotto p : inventarioAttuale) {
+			Object[] riga = {p.getId(), p.getNome(), p.getQuantitaInScorta()};
+			model.addRow(riga);
+		}
+	}
 }

@@ -14,7 +14,8 @@ public class DashboardAdmin extends JFrame {
     private JButton btnGestioneMagazzino;
     private JButton btnVisualizzaPrenotazioni;
     private JButton btnLogout;
-
+    private JButton btnVisualizzaFeedback;
+    
     public DashboardAdmin() {
         // 1. Configurazione Finestra
         setTitle("Barbershop - Pannello Amministratore");
@@ -34,22 +35,25 @@ public class DashboardAdmin extends JFrame {
         panelHeader.add(lblTitolo);
 
         // 4. Area Centrale con i comandi
-        JPanel panelMenu = new JPanel(new GridLayout(3, 1, 15, 15));
+        JPanel panelMenu = new JPanel(new GridLayout(4, 1, 15, 15));
         panelMenu.setBorder(BorderFactory.createEmptyBorder(40, 120, 40, 120));
 
         btnGestioneMagazzino = new JButton("📦 Gestione Magazzino");
         btnVisualizzaPrenotazioni = new JButton("📅 Visualizza Prenotazioni");
         btnLogout = new JButton("🚪 Esci dal Sistema");
-
+        btnVisualizzaFeedback = new JButton("⭐ Visualizza Feedback");
+        
         // Stile veloce per distinguere i bottoni admin
         btnGestioneMagazzino.setFocusPainted(false);
         btnVisualizzaPrenotazioni.setFocusPainted(false);
         btnLogout.setFocusPainted(false);
-
+        btnVisualizzaFeedback.setFocusPainted(false);
+        
         panelMenu.add(btnGestioneMagazzino);
         panelMenu.add(btnVisualizzaPrenotazioni);
         panelMenu.add(btnLogout);
-
+        panelMenu.add(btnVisualizzaFeedback);
+        
         // 5. Composizione finale
         add(panelHeader, BorderLayout.NORTH);
         add(panelMenu, BorderLayout.CENTER);
@@ -68,6 +72,8 @@ public class DashboardAdmin extends JFrame {
     	return btnVisualizzaPrenotazioni; }
     public JButton getBtnLogout() { 
     	return btnLogout; }
-	
+    public JButton getBtnVisualizzaFeedback() { 
+        return btnVisualizzaFeedback; 
+    }
 
 }
