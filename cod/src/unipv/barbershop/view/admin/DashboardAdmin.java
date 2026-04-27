@@ -6,9 +6,7 @@ import unipv.barbershop.facade.BarbershopFacade;
 import unipv.barbershop.model.user.Utente;
 
 public class DashboardAdmin extends JFrame {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	// Bottoni per le funzioni amministrative
     private JButton btnGestioneMagazzino;
@@ -38,10 +36,10 @@ public class DashboardAdmin extends JFrame {
         JPanel panelMenu = new JPanel(new GridLayout(4, 1, 15, 15));
         panelMenu.setBorder(BorderFactory.createEmptyBorder(40, 120, 40, 120));
 
-        btnGestioneMagazzino = new JButton("📦 Gestione Magazzino");
-        btnVisualizzaPrenotazioni = new JButton("📅 Visualizza Prenotazioni");
-        btnLogout = new JButton("🚪 Esci dal Sistema");
-        btnVisualizzaFeedback = new JButton("⭐ Visualizza Feedback");
+        btnGestioneMagazzino = new JButton("Gestione Magazzino");
+        btnVisualizzaPrenotazioni = new JButton("Visualizza Prenotazioni");
+        btnLogout = new JButton("Esci dal Sistema");
+        btnVisualizzaFeedback = new JButton("Visualizza Feedback");
         
         // Stile veloce per distinguere i bottoni admin
         btnGestioneMagazzino.setFocusPainted(false);

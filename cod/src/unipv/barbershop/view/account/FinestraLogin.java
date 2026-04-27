@@ -68,12 +68,14 @@ public class FinestraLogin extends JFrame {
 
 		btnRegistrati = new JButton("Crea un account Cliente");
 		btnRegistrati.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnRegistrati.putClientProperty("JButton.buttonType", "roundRect");
-
+		btnRegistrati.setBorderPainted(false);
+		btnRegistrati.setContentAreaFilled(false);
+		btnRegistrati.setForeground(Color.RED); 
+		btnRegistrati.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		mainPanel.add(btnAccedi);
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+		mainPanel.add(btnAccedi);
+		mainPanel.add(Box.createRigidArea(new Dimension(0, 5))); 
 		mainPanel.add(btnRegistrati);
-
 		add(mainPanel);
 
 		// --- 5. AZIONI DEI BOTTONI ---
@@ -87,12 +89,12 @@ public class FinestraLogin extends JFrame {
 				// Chiamata al TUO Backend
 				// Il controller verifica i dati E apre automaticamente la Dashboard corretta!
 				if (loginController.gestisciLogin(email, password)) {
-				    // Il login è andato bene e la Dashboard è già in fase di apertura grazie al Controller.
-				    // A noi resta solo da chiudere questa finestra di login per pulire lo schermo.
-				    dispose(); 
+					// Il login è andato bene e la Dashboard è già in fase di apertura grazie al Controller.
+					// A noi resta solo da chiudere questa finestra di login per pulire lo schermo.
+					dispose(); 
 				} else {
-				    // Se il login fallisce, il Controller restituisce false e noi mostriamo l'errore.
-				    JOptionPane.showMessageDialog(FinestraLogin.this, "Credenziali errate!", "Errore", JOptionPane.ERROR_MESSAGE);
+					// Se il login fallisce, il Controller restituisce false e noi mostriamo l'errore.
+					JOptionPane.showMessageDialog(FinestraLogin.this, "Credenziali errate!", "Errore", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -101,8 +103,8 @@ public class FinestraLogin extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(FinestraLogin.this, "Qui si aprirà la finestra di registrazione!");
-				 dispose();
-				 new FinestraRegistrazione().setVisible(true);
+				dispose();
+				new FinestraRegistrazione().setVisible(true);
 			}
 		});
 	}

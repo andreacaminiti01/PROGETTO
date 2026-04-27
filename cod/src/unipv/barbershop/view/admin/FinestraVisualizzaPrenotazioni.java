@@ -40,7 +40,7 @@ public class FinestraVisualizzaPrenotazioni extends JFrame {
 		// 3. Bottoni
 		JPanel panelSud = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
 
-		panelSud.add(new JLabel("🔍 Filtra Risultati:"));
+		panelSud.add(new JLabel(" Filtra Risultati:"));
 		txtRicerca = new JTextField(20); // Spazio per scrivere
 		panelSud.add(txtRicerca);
 

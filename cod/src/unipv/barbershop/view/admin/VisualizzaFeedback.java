@@ -27,7 +27,7 @@ public class VisualizzaFeedback extends JFrame {
 			Object[] riga = {
 					f.getCliente().getNome() + " " + f.getCliente().getCognome(),
 					f.getPrenotazioneRiferimento().getDataOra().toString().replace("T", " "),
-					f.getVoto() + " ★",
+					f.getVoto() + "/5",
 					f.getCommento()
 			};
 			model.addRow(riga);

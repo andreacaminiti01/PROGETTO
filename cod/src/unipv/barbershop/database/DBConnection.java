@@ -19,7 +19,7 @@ public class DBConnection {
 	private DBConnection() {
 		try {
 			Properties props = new Properties();
-			InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("db.properties");
+			InputStream input = DBConnection.class.getResourceAsStream("/db.properties");
 
 			// Controllo di sicurezza
 			if (input == null) {

@@ -74,9 +74,9 @@ public class FinestraMagazzino extends JFrame {
 		// 3. SECONDA RIGA: Solo i bottoni
 		JPanel panelBottoni = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
 
-		btnAggiungiNuovo = new JButton("➕ Aggiungi Nuovo");
-		btnRifornisci = new JButton("🟢 Rifornisci (+)");
-		btnConsuma = new JButton("🔴 Consuma (-)");
+		btnAggiungiNuovo = new JButton("Aggiungi Nuovo");
+		btnRifornisci = new JButton("Rifornisci (+)");
+		btnConsuma = new JButton(" Consuma (-)");
 		btnTornaIndietro = new JButton("Indietro");
 
 		// Aggiungiamo i bottoni nell'ordine corretto
