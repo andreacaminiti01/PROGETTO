@@ -1,5 +1,4 @@
 package unipv.barbershop.controller;
-import unipv.barbershop.dao.daoFeedback.*;
 import unipv.barbershop.view.admin.DashboardAdmin;
 import unipv.barbershop.view.admin.FinestraMagazzino;
 import unipv.barbershop.view.admin.FinestraVisualizzaPrenotazioni;
@@ -41,7 +40,7 @@ public class DashboardAdminController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FinestraVisualizzaPrenotazioni vistaPrenotazioni = new FinestraVisualizzaPrenotazioni();
-
+				new PrenotazioniAdminController(vistaPrenotazioni);
 				// 2. Recuperiamo la lista di prenotazioni dal database tramite la Facade
 				java.util.List<String[]> datiPrenotazioni = BarbershopFacade.getInstance().getElencoPrenotazioniAdmin();
 
