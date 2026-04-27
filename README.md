@@ -78,5 +78,14 @@ Per rendere il progetto operativo sulla propria macchina locale:
     ```
 3.  **Librerie**: Assicurarsi che il driver JDBC (`mysql-connector-j`) sia incluso nel Build Path del progetto.
 
----
+**4. Interfaccia Grafica e UI/UX (Frontend)**
+L'interfaccia utente è stata completamente rinnovata e scollegata dalla logica di business seguendo il pattern architetturale **MVC (Model-View-Controller)**:
+* **Design Moderno:** Integrazione della libreria **FlatLaf** (FlatLightLaf) per garantire un Look & Feel nativo, moderno e "web-oriented", con componenti arrotondati e padding ottimizzati.
+* **User Experience:** Layout reattivi gestiti tramite `BorderLayout` e `BoxLayout`, con testi puliti ed elementi interattivi intuitivi.
+
+**5. Rilascio ed Esecuzione (Deployment)**
+Il software è progettato per essere distribuito come applicazione desktop standalone:
+* L'intero progetto viene compilato in un file eseguibile **Runnable JAR**.
+* Le dipendenze esterne (driver JDBC) e i file di configurazione vengono pacchettizzati dinamicamente all'interno dell'archivio, garantendo la totale portabilità del sistema senza configurazioni aggiuntive per l'utente finale.
+
 *Backend sviluppato seguendo gli standard di Ingegneria del Software - Università di Pavia.*
