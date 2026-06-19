@@ -79,7 +79,7 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 	        rsKeys = st1.getGeneratedKeys();
 	        int idPrenotazione = -1; // "Valore sentinella"
 	        if (rsKeys.next()) {
-	            idPrenotazione = rsKeys.getInt(1); // Ora idPrenotazione contiene l'ID vero (es. 15)
+	            idPrenotazione = rsKeys.getInt(1); // Ora idPrenotazione contiene l'ID vero 
 	        }
 
 	        // 6. SALVATAGGIO SERVIZI (TABELLA PONTE): Colleghiamo la prenotazione ai servizi scelti
@@ -93,12 +93,12 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 	            st2.executeUpdate(); // Ogni servizio diventa una riga nella tabella ponte
 	        }
 
-	        // 7. FINE TRANSAZIONE: Se siamo arrivati qui senza errori, salviamo tutto definitivamente!
+	        // Se siamo arrivati qui senza errori, salviamo tutto definitivamente!
 	        conn.commit(); 
 	        esito = true;
 
 	    } catch (Exception e) {
-	        // 8. GESTIONE ERRORI: Se qualcosa va storto, annulliamo tutto quello che avevamo iniziato (Rollback)
+	        // Se qualcosa va storto, annulliamo tutto quello che avevamo iniziato (Rollback)
 	        e.printStackTrace();
 	        try {
 	            if (conn != null) conn.rollback(); 
@@ -106,7 +106,7 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 	            ex.printStackTrace();
 	        }
 	    } finally {
-	        // 9. PULIZIA TOTALE (IL FINALLY SALVA IL DB!): Chiudiamo tutto quello che abbiamo aperto
+	        // Chiudiamo tutto quello che abbiamo aperto
 	        try {
 	            if (conn != null) conn.setAutoCommit(true); // Riportiamo la connessione allo stato normale
 	        } catch (Exception e) {}
@@ -147,7 +147,7 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 	            Prenotazione p = new Prenotazione();
 	            p.setId(rs.getInt("id"));
 	            
-	            // Convertiamo il Timestamp del DB nel tuo LocalDateTime
+	            // Convertiamo il Timestamp del DB nel LocalDateTime
 	            p.setDataOra(rs.getTimestamp("data_ora").toLocalDateTime());
 	            
 	            // Creiamo l'oggetto Barbiere "dentro" la prenotazione
@@ -164,7 +164,7 @@ public class PrenotazioneDAO implements IPrenotazioneDAO {
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    } finally {
-	        // Pulizia standard come nei tuoi altri metodi
+	        // Pulizia standard
 	        try { if (rs != null) rs.close(); } catch (SQLException e) {}
 	        try { if (ps != null) ps.close(); } catch (SQLException e) {}
 	        DBConnection.getInstance().closeConnection(connLocale);

@@ -62,7 +62,7 @@ public class MagazzinoController {
 				if (facade.aggiungiNuovoProdotto(nuovo)) {
 					JOptionPane.showMessageDialog(vista, "Prodotto '" + nome + "' inserito con successo!");
 					vista.svuotaCampiTesto();
-					ricaricaTabella(); // Aggiorna la JTable con i dati freschi dal DB
+					ricaricaTabella(); // Aggiorna la JTable con i dati dal DB
 				} else {
 					JOptionPane.showMessageDialog(vista, "Errore durante l'inserimento nel database.");
 				}
@@ -97,7 +97,7 @@ public class MagazzinoController {
 				return;
 			}
 
-			// 3. Esecuzione dell'operazione usando la tua logica a oggetti
+			// 3. Esecuzione dell'operazione usando la logica a oggetti
 			boolean successo = false;
 			if (isRifornimento) {
 				prodottoSelezionato.setQuantitaInScorta(prodottoSelezionato.getQuantitaInScorta() + quantita);
@@ -111,7 +111,7 @@ public class MagazzinoController {
 			if (successo) {
 				JOptionPane.showMessageDialog(vista, "Operazione completata con successo!");
 				vista.svuotaCampiTesto();
-				ricaricaTabella(); // Ricarica i dati freschi dal DB
+				ricaricaTabella(); // Ricarica i dati dal DB
 
 				if (!isRifornimento && prodottoSelezionato.isEsaurito()) {
 					JOptionPane.showMessageDialog(vista, "ATTENZIONE: Il prodotto " + prodottoSelezionato.getNome() + " è esaurito!", "Allarme Scorte", JOptionPane.WARNING_MESSAGE);
@@ -123,7 +123,7 @@ public class MagazzinoController {
 		} catch (NumberFormatException ex) {
 			JOptionPane.showMessageDialog(vista, "Inserisci numeri validi, non lettere!", "Errore formato", JOptionPane.ERROR_MESSAGE);
 		} catch (ScortaInsufficienteException | NegativeValueException ex) {
-			// Cattura le TUE eccezioni personalizzate e ne mostra il messaggio!
+			// Cattura le eccezioni personalizzate e ne mostra il messaggio!
 			JOptionPane.showMessageDialog(vista, ex.getMessage(), "Operazione negata", JOptionPane.ERROR_MESSAGE);
 		}
 	}

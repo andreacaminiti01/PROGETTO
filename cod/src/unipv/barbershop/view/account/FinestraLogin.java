@@ -22,14 +22,14 @@ public class FinestraLogin extends JFrame {
 	public FinestraLogin() {
 		this.loginController = new LoginController();
 
-		// --- 1. IMPOSTAZIONI FINESTRA ---
+		//  1. IMPOSTAZIONI FINESTRA 
 		setTitle("Barbershop - Autenticazione");
 		setSize(400, 350);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null); // Centra la finestra nello schermo
 		setResizable(false); // Impedisce di ridimensionarla
 
-		// --- 2. DESIGN PRINCIPALE (Uso dei margini per far "respirare" l'app) ---
+		//  2. DESIGN PRINCIPALE (Uso dei margini per l'app) 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40)); // Padding: su, destra, giù, sinistra
@@ -43,7 +43,7 @@ public class FinestraLogin extends JFrame {
 		mainPanel.add(lblTitolo);
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
-		// --- 3. CAMPI DI TESTO ---
+		// 3. CAMPI DI TESTO 
 		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setAlignmentX(Component.CENTER_ALIGNMENT);
 		txtEmail = new JTextField(20);
@@ -61,7 +61,7 @@ public class FinestraLogin extends JFrame {
 		mainPanel.add(txtPassword);
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
-		// --- 4. BOTTONI (Con stile FlatLaf arrotondato) ---
+		// 4. BOTTONI (Con stile FlatLaf arrotondato) 
 		btnAccedi = new JButton("Accedi");
 		btnAccedi.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnAccedi.putClientProperty("JButton.buttonType", "roundRect"); // Magia FlatLaf per arrotondare!
@@ -78,7 +78,7 @@ public class FinestraLogin extends JFrame {
 		mainPanel.add(btnRegistrati);
 		add(mainPanel);
 
-		// --- 5. AZIONI DEI BOTTONI ---
+		// 5. AZIONI DEI BOTTONI 
 
 		btnAccedi.addActionListener(new ActionListener() {
 			@Override
@@ -86,11 +86,11 @@ public class FinestraLogin extends JFrame {
 				String email = txtEmail.getText();
 				String password = new String(txtPassword.getPassword());
 
-				// Chiamata al TUO Backend
-				// Il controller verifica i dati E apre automaticamente la Dashboard corretta!
+				// Chiamata al Backend
+				// Il controller verifica i dati e apre automaticamente la Dashboard corretta!
 				if (loginController.gestisciLogin(email, password)) {
 					// Il login è andato bene e la Dashboard è già in fase di apertura grazie al Controller.
-					// A noi resta solo da chiudere questa finestra di login per pulire lo schermo.
+					// resta solo da chiudere questa finestra di login per pulire lo schermo.
 					dispose(); 
 				} else {
 					// Se il login fallisce, il Controller restituisce false e noi mostriamo l'errore.

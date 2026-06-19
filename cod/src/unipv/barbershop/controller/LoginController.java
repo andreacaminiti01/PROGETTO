@@ -5,7 +5,7 @@ import unipv.barbershop.view.admin.DashboardAdmin;
 import unipv.barbershop.view.cliente.DashboardCliente;
 
 public class LoginController {
-	// Il Controller ha bisogno di parlare con la Facade
+	// Il Controller ha bisogno della Facade
     private BarbershopFacade facade;
 
     public LoginController() {
@@ -30,12 +30,12 @@ public class LoginController {
         // 2. Deleghiamo il vero controllo alla Facade
         boolean successo = facade.login(email, password);
 
-        // 3. Decidiamo cosa fare dopo
+        // 3. Decidiamo cosa fare
         if (successo) {
             Utente utenteLoggato = facade.getLoggedUser();
             System.out.println("Benvenuto, " + utenteLoggato.getNome() + "!");
             
-            // POLIMORFISMO IN AZIONE: Controlliamo il ruolo per aprire la schermata giusta
+            // POLIMORFISMO: Controlliamo il ruolo per aprire la schermata giusta
             if ("AMMINISTRATORE".equals(utenteLoggato.getRuolo())) {
                 apriDashboardAdmin();
             } else {
@@ -65,7 +65,7 @@ public class LoginController {
     private void apriDashboardCliente() {
     	System.out.println("Apertura Area Riservata Cliente...");
         DashboardCliente viewCliente = new DashboardCliente();
-     // MAGIA: Colleghiamo la vista appena creata al suo nuovo Controller!
+     // Colleghiamo la vista appena creata al suo nuovo Controller!
         new ClienteController(viewCliente);
         viewCliente.setVisible(true);
         

@@ -36,7 +36,7 @@ public class FeedbackDAO implements IFeedbackDAO {
 			esito = true;
 
 		} catch (java.sql.SQLIntegrityConstraintViolationException e) {
-			// CATTURIAMO IL DUPLICATO: Niente scritte rosse, stampiamo un messaggio pulito in console
+			// CATTURIAMO IL DUPLICATO: stampiamo un messaggio pulito
 			System.out.println("Avviso: Il cliente ha già lasciato un feedback per questa prenotazione.");
 			esito = false;
 

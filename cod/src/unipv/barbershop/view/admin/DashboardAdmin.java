@@ -56,13 +56,13 @@ public class DashboardAdmin extends JFrame {
         add(panelHeader, BorderLayout.NORTH);
         add(panelMenu, BorderLayout.CENTER);
         
-        // Aggiungiamo una piccola nota in basso per professionalità
+  
         JLabel lblStatus = new JLabel(" Accesso autorizzato come: AMMINISTRATORE", SwingConstants.LEFT);
         lblStatus.setFont(new Font("Arial", Font.ITALIC, 11));
         add(lblStatus, BorderLayout.SOUTH);
     }
 
-    // --- GETTER PER IL CONTROLLER ---
+    //GETTER PER IL CONTROLLER
     // Il MagazzinoController userà questi per attivare le funzioni
     public JButton getBtnGestioneMagazzino() { 
     	return btnGestioneMagazzino; }

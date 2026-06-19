@@ -22,7 +22,7 @@ public class UtenteDAO implements IUtenteDAO {
     // 2. COSTRUTTORE 
     public UtenteDAO() {
         super();
-        this.schema = "barbershop"; // Inserisci qui il nome esatto del tuo database su Workbench
+        this.schema = "barbershop"; 
     }
 
     @Override
@@ -124,7 +124,7 @@ public class UtenteDAO implements IUtenteDAO {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
             
-            // Chiudiamo la connessione locale: così la prossima volta sarà di nuovo nuova!
+            // Chiudiamo la connessione locale: così la prossima volta sarà di nuovo nuova
             DBConnection.getInstance().closeConnection(connLocale);
         }
         
@@ -175,7 +175,7 @@ public class UtenteDAO implements IUtenteDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // 4. Chiusura di tutto il set di strumenti
+            // 4. Chiusura di tutto il set
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
             DBConnection.getInstance().closeConnection(connLocale);
@@ -199,11 +199,10 @@ public class UtenteDAO implements IUtenteDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                Barbiere b = new Barbiere(); // Assicurati di avere l'import di Barbiere in alto!
+                Barbiere b = new Barbiere();
                 b.setId(rs.getInt("id"));
                 b.setNome(rs.getString("nome"));
                 b.setCognome(rs.getString("cognome"));
-                // (Ignoriamo email e password perché per la tendina della prenotazione non ci servono)
                 
                 listaBarbieri.add(b);
             }
@@ -219,47 +218,6 @@ public class UtenteDAO implements IUtenteDAO {
         return listaBarbieri;
     }
 }
-
-/*	@Override
-	public boolean registraUtente(Utente utente) {
-		// 1. Apriamo la connessione usando la tua classe DBConnection
-		conn = DBConnection.startConnection(conn, schema);
-		PreparedStatement st1 = null;
-		boolean esito = false;
-
-		try {
-			// 2. Prepariamo la query con i punti di domanda (?)
-			// I punti di domanda sono fondamentali: evitano che gli hacker blocchino il database!
-			String query = "INSERT INTO utenti (nome, cognome, email, password, ruolo, telefono) VALUES (?, ?, ?, ?, ?, ?)";
-			st1 = conn.prepareStatement(query);
-
-			// 3. Riempiamo i punti di domanda con i dati dell'oggetto Utente
-			st1.setString(1, utente.getNome());
-			st1.setString(2, utente.getCognome());
-			st1.setString(3, utente.getEmail());
-			st1.setString(4, utente.getPassword());
-			st1.setString(5, utente.getRuolo());
-			// Capiamo se l'utente che stiamo salvando è un Cliente o un Amministratore
-			// Se è un Cliente, ci darà il numero. Se è Amministratore, ci darà "null".
-			if (utente.getTelefono() != null) {
-			    st1.setString(6, utente.getTelefono());
-			} else {
-			    st1.setNull(6, java.sql.Types.VARCHAR);
-			}
-
-			// 4. Eseguiamo il comando e confermiamo che è andato a buon fine
-			st1.executeUpdate();
-			esito = true;
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// 5. Chiudiamo la connessione in modo pulito
-		DBConnection.closeConnection(conn);
-		return esito;
-	}*/
-	
 	
 
 

@@ -39,7 +39,7 @@ public class ProdottoDAO implements IProdottoDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // IL FINALLY SALVA LA VITA AL DATABASE!
+            // IL FINALLY SALVA IL DATABASE!
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
             DBConnection.getInstance().closeConnection(conn);
         }

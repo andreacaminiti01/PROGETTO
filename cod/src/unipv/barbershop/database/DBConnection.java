@@ -15,7 +15,7 @@ public class DBConnection {
 	private String user;
 	private String pass;
 
-	// 3. Il Costruttore: legge il file UNA SOLA VOLTA quando l'oggetto nasce!
+	// 3. Il Costruttore: legge il file una sola volta
 	private DBConnection() {
 		try {
 			Properties props = new Properties();
@@ -30,7 +30,7 @@ public class DBConnection {
 			props.load(input);
 			input.close();
 
-			// Salviamo i dati dentro le variabili del nostro oggetto (this)
+			// Salviamo i dati dentro le variabili del nostro oggetto 
 			this.driver = props.getProperty("db.driver", "com.mysql.cj.jdbc.Driver");
 			this.urlBase = props.getProperty("db.url"); 
 			this.user = props.getProperty("db.user");
@@ -53,14 +53,10 @@ public class DBConnection {
 		return instance;
 	}
 
-	// ==========================================================
-	// 5. METODI DELL'OGGETTO 
-	// ==========================================================
-
 	// Metodo per APRIRE la connessione
 	public Connection startConnection(String schema) {
 		try {
-			// Usa le MIE variabili d'istanza (this) per connettersi
+			// Usa le mie variabili d'istanza (this) per connettersi
 			return DriverManager.getConnection(this.urlBase + schema, this.user, this.pass); 
 		} catch (SQLException e) {
 			e.printStackTrace();

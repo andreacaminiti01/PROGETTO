@@ -25,7 +25,7 @@ public class DashboardCliente extends JFrame {
         setLocationRelativeTo(null); // Centra la finestra al centro dello schermo
         setLayout(new BorderLayout());
 
-        // 2. MAGIA DELLA FACADE: Chiediamo chi è entrato per salutarlo per nome!
+        // 2. STRATEGIA FACADE: Chiediamo chi è entrato!
         Utente utenteLoggato = BarbershopFacade.getInstance().getLoggedUser();
         String nomeCliente = (utenteLoggato != null) ? utenteLoggato.getNome() : "Cliente";
 
@@ -54,7 +54,7 @@ public class DashboardCliente extends JFrame {
         add(panelCenter, BorderLayout.CENTER);
     }
 
-    // --- GETTER ---
+    // GETTER 
     // Questi sono FONDAMENTALI: permettono al Controller di "agganciare" i bottoni
     // senza doverli rendere public e rovinare l'incapsulamento!
     public JButton getBtnPrenota() { 

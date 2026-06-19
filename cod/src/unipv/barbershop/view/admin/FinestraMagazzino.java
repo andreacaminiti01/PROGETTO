@@ -79,20 +79,20 @@ public class FinestraMagazzino extends JFrame {
 		btnConsuma = new JButton(" Consuma (-)");
 		btnTornaIndietro = new JButton("Indietro");
 
-		// Aggiungiamo i bottoni nell'ordine corretto
+		//i bottoni nell'ordine corretto
 		panelBottoni.add(btnAggiungiNuovo);
 		panelBottoni.add(btnRifornisci);
 		panelBottoni.add(btnConsuma);
 		panelBottoni.add(btnTornaIndietro);
 
-		// 4. Inseriamo le due righe nel pannello principale Sud
+		// 4. due righe nel pannello principale Sud
 		panelSudCompleto.add(panelInput);
 		panelSudCompleto.add(panelBottoni);
 
 		// 5. Aggiungiamo il tutto alla finestra
 		add(panelSudCompleto, BorderLayout.SOUTH);
 	}
-	// --- METODI PER IL CONTROLLER ---
+	//  METODI PER IL CONTROLLER
 
 	// Getters per permettere al Controller di leggere i dati scritti e agganciare i click
 	public JButton getBtnRifornisci() { return btnRifornisci; }
@@ -103,7 +103,7 @@ public class FinestraMagazzino extends JFrame {
 	public String getIdProdottoText() { return txtIdProdotto.getText(); }
 	public String getQuantitaText() { return txtQuantita.getText(); }
 
-	// Metodo fondamentale per svuotare e riempire la tabella con i dati freschi dal DB!
+	// Metodo fondamentale per svuotare e riempire la tabella con i dati dal DB!
 	public DefaultTableModel getTableModel() { return tableModel; }
 	public JTable getTabellaProdotti() { return tabellaProdotti; }
 

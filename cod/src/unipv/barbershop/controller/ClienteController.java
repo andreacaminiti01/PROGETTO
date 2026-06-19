@@ -26,7 +26,7 @@ public class ClienteController {
 
 	private void inizializzaEventi() {
 
-		// --- 1. GESTIONE NUOVA PRENOTAZIONE ---
+		// 1. GESTIONE NUOVA PRENOTAZIONE
 		view.getBtnPrenota().addActionListener(e -> {
 			List<Barbiere> barbieri = facade.getBarbieriDisponibili();
 			List<Servizio> servizi = facade.getServiziOfferti();
@@ -40,7 +40,7 @@ public class ClienteController {
 			fp.setVisible(true);
 		});
 
-		// --- 2. BOTTONE I MIEI APPUNTAMENTI / FEEDBACK ---
+		// 2. BOTTONE I MIEI APPUNTAMENTI / FEEDBACK
 		view.getBtnFeedback().addActionListener(e -> {
 			List<Prenotazione> storico = facade.getStoricoDettagliato();
 
@@ -58,7 +58,7 @@ public class ClienteController {
 			fs.setVisible(true);
 		});
 
-		// --- 3. BOTTONE LOGOUT (Problema Risolto!) ---
+		//3. BOTTONE LOGOUT
 		view.getBtnLogout().addActionListener(e -> {
 			int conferma = JOptionPane.showConfirmDialog(view, 
 					"Vuoi uscire dal tuo account?", "Conferma Logout", JOptionPane.YES_NO_OPTION);
@@ -80,7 +80,7 @@ public class ClienteController {
 			String oraTesto = (String) fp.getComboOre().getSelectedItem();
 			LocalDateTime dataOra = LocalDateTime.parse(dataTesto + "T" + oraTesto + ":00");
 
-			// --- CONTROLLO VIAGGIO NEL TEMPO (Problema Risolto!) ---
+			// CONTROLLO DEL TEMPO
 			if (dataOra.isBefore(LocalDateTime.now())) {
 				JOptionPane.showMessageDialog(fp, 
 						"Errore: Non puoi prenotare un appuntamento in una data già passata!", 
@@ -129,7 +129,7 @@ public class ClienteController {
 			Cliente c = (Cliente) facade.getLoggedUser();
 
 			try {
-				// Usiamo l'oggetto Feedback che hai creato
+			
 				Feedback f = new Feedback(c, p, voto, commento);
 
 				// Salviamo nel DB
@@ -137,7 +137,7 @@ public class ClienteController {
 					JOptionPane.showMessageDialog(dialog, "Grazie! Feedback inviato con successo.");
 					dialog.dispose(); // Chiude il popup
 				} else {
-					// IL TUO MESSAGGIO PERSONALIZZATO CON IL TRIANGOLINO GIALLO
+					//MESSAGGIO DI WARNING
 					JOptionPane.showMessageDialog(dialog, "Hai già lasciato un feedback per questo appuntamento!", "Attenzione", JOptionPane.WARNING_MESSAGE);
 				}
 			} catch (IllegalArgumentException ex) {

@@ -27,10 +27,8 @@ public class DashboardAdminController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FinestraMagazzino vistaMagazzino = new FinestraMagazzino();
-				// MAGIA: Colleghiamo la Vista appena aperta al suo Controller!
+				// Colleghiamo la Vista appena aperta al suo Controller!
 				new MagazzinoController(vistaMagazzino);
-				// (Qui poi aggiungeremo il MagazzinoController per riempire la tabella!)
-
 				vistaMagazzino.setVisible(true);
 			}
 		});
@@ -44,7 +42,7 @@ public class DashboardAdminController {
 				// 2. Recuperiamo la lista di prenotazioni dal database tramite la Facade
 				java.util.List<String[]> datiPrenotazioni = BarbershopFacade.getInstance().getElencoPrenotazioniAdmin();
 
-				// 3. Prendiamo il "modello" della tabella (il cervello dei dati)
+				// 3. Prendiamo il "modello" della tabella 
 				javax.swing.table.DefaultTableModel model = vistaPrenotazioni.getTableModel();
 
 				// 4. Puliamo la tabella (per sicurezza) e aggiungiamo le righe una ad una
@@ -60,7 +58,7 @@ public class DashboardAdminController {
 			}
 		});
 
-		// 3. TASTO LOGOUT (Il più importante per la sicurezza)
+		// 3. TASTO LOGOUT
 		vistaAdmin.getBtnLogout().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -76,7 +74,7 @@ public class DashboardAdminController {
 
 					// Riportiamo l'utente alla schermata di Login
 					FinestraLogin login = new FinestraLogin();
-					// Assicurati che LoginController sia agganciato alla finestra di login nel tuo codice Main
+	
 					login.setVisible(true); 
 				}
 			}

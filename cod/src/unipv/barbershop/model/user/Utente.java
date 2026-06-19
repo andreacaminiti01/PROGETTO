@@ -3,7 +3,7 @@ import unipv.barbershop.model.user.exception.EmptyFieldException;
 import unipv.barbershop.model.user.exception.InvalidFormatException;
 /**
  * Superclasse astratta che rappresenta un utente generico del sistema.
- * Contiene gli attributi comuni a tutti gli attori (Cliente, Barbiere, Amministratore).
+ * Contiene gli attributi comuni a tutti gli attori (Cliente,Amministratore).
  * Questa classe non può essere istanziata direttamente.
  * */
 
@@ -93,7 +93,7 @@ public abstract class Utente {
 	}
 
 	// Metodo di base: facciamo restituire un ruolo generico 
-	// (Se la classe Utente è "abstract", puoi fare direttamente un metodo astratto!)
+	// (Se la classe Utente è "abstract",facciamo direttamente un metodo astratto!)
 	public String getRuolo() {
 		return "UTENTE"; 
 	}

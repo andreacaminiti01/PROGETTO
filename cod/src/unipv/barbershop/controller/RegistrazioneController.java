@@ -36,7 +36,7 @@ public class RegistrazioneController {
         } catch (EmptyFieldException | InvalidFormatException e) {
             // 3. GESTIONE ERRORI DI VALIDAZIONE 
             System.out.println("Errore di validazione: " + e.getMessage());
-            // Il controller restituisce false, così Fabio sa che deve mostrare un popup di errore all'utente
+            // Il controller restituisce false
             return false;
             
         } catch (Exception e) {

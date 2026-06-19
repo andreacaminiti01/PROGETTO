@@ -88,7 +88,7 @@ public class FinestraRegistrazione extends JFrame{
 
 		// --- 5. AZIONI DEI BOTTONI ---
 
-		// Cosa succede se clicco "Registrati"?
+		// quello che succede se clicco "Registrati"
 		btnRegistrati.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -98,7 +98,7 @@ public class FinestraRegistrazione extends JFrame{
 					return;
 				}
 
-				// AVVOLGIAMO TUTTO NEL TRY-CATCH PER ASCOLTARE LE TUE ECCEZIONI
+				// AVVOLGIAMO TUTTO NEL TRY-CATCH PER ASCOLTARE LE ECCEZIONI
                 try {
                     // 2. Creiamo il CLIENTE
                     Cliente nuovoUtente = new Cliente();
@@ -113,7 +113,7 @@ public class FinestraRegistrazione extends JFrame{
                         nuovoUtente.setCognome("N/A"); 
                     }
 
-                    // QUI SCATTANO LE TUE ECCEZIONI SE I DATI SONO SBAGLIATI!
+                    // QUI SCATTANO LE ECCEZIONI SE I DATI SONO SBAGLIATI!
                     nuovoUtente.setEmail(txtEmail.getText());
                     nuovoUtente.setPassword(new String(txtPassword.getPassword()));
                     
@@ -139,7 +139,7 @@ public class FinestraRegistrazione extends JFrame{
             }
         });
 
-		// Cosa succede se clicco "Torna al Login"?
+		// quello che succede se clicco "Torna al Login"
 		btnAnnulla.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

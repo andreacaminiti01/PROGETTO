@@ -73,7 +73,7 @@ public class ServizioDAO implements IServizioDAO {
         } finally {
             try { if (rs != null) rs.close(); } catch (SQLException e) {}
             try { if (ps != null) ps.close(); } catch (SQLException e) {}
-            DBConnection.getInstance().closeConnection(connLocale);
+            DBConnection.getInstance().closeConnection(connLocale); //RICHIUDIAMO
         }
         return listino;
     }

@@ -21,7 +21,7 @@ public class BarbershopFacade {
 
 	private static BarbershopFacade instance;
 
-	// Stato della Sessione (come in ConcreteSessionFacade)
+	// Stato della Sessione
 	private Utente loggedUser;
 	private boolean isLoggedIn;
 
@@ -50,7 +50,7 @@ public class BarbershopFacade {
 		return instance;
 	}
 
-	// --- AREA SESSIONE & UTENTE ---
+	//AREA SESSIONE & UTENTE
 
 	public boolean login(String email, String password) {
 		try {
@@ -77,7 +77,7 @@ public class BarbershopFacade {
 		return this.isLoggedIn;
 	}
 
-	// --- AREA OPERATIVA (DELEGA AI DAO) ---
+	//AREA OPERATIVA (DELEGA AI DAO)
 
 	public List<Servizio> getTuttiIServizi() {
 		// Nasconde la complessità della chiamata al DB
@@ -93,18 +93,18 @@ public class BarbershopFacade {
 		utenteDAO.inserisciUtente(u);
 	}
 	/**
-	 * 3. Recupera tutti i prodotti presenti in inventario.
+	 * Recupera tutti i prodotti presenti in inventario.
 	 */
 	public List<Prodotto> getTuttiIProdotti() {
 		return prodottoDAO.recuperaTuttiIProdotti();
 	}
 
 	/**
-	 * 4. Aggiorna lo stato di un prodotto (scorte/nome) nel database.
+	 * Aggiorna lo stato di un prodotto (scorte/nome) nel database.
 	 */
 	public boolean aggiornaProdotto(Prodotto p) {
-		// IL TRUCCO È QUI: La Facade fa da ponte. Prende l'oggetto Prodotto
-		// ed estrae l'ID e la quantità per passarli al tuo metodo aggiornaScorta!
+		/*La Facade fa da ponte. Prende l'oggetto Prodotto
+ 			ed estrae l'ID e la quantità per passarli al metodo aggiornaScorta!*/
 		return prodottoDAO.aggiornaScorta(p.getId(), p.getQuantitaInScorta());
 	}
 
@@ -119,11 +119,10 @@ public class BarbershopFacade {
 	}
 
 	public boolean prenota(Prenotazione p) throws PostiEsauritiException {
-	    return prenotazioneDAO.salvaPrenotazione(p); // Usa il tuo DAO
+	    return prenotazioneDAO.salvaPrenotazione(p); 
 	}
 	
 	public boolean inviaFeedback(Feedback f) {
-	    // Supponendo che tu abbia istanziato feedbackDAO nel costruttore
 	    return feedbackDAO.salvaFeedback(f);
 	}
 	
