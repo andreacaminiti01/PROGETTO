@@ -23,7 +23,7 @@ public class DBConnection {
 
 			// Controllo di sicurezza
 			if (input == null) {
-				System.err.println("ERRORE GRAVE: File db.properties non trovato! Assicurati che sia nella cartella 'src'.");
+				System.err.println("ERRORE GRAVE: File db.properties non trovato!");
 				return;
 			}
 

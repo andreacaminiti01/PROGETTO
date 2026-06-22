@@ -52,7 +52,7 @@ public class Feedback {
 
 	public void setVoto(int voto) {
 		if (voto < 1 || voto > 5) {
-			throw new IllegalArgumentException("Il voto deve essere tra 1 e 5 stelle.");
+			throw new IllegalArgumentException("Il voto deve essere tra 1 e 5");
 		}
 		this.voto = voto;
 	}
